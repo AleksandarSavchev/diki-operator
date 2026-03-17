@@ -1,0 +1,2517 @@
+{
+    "time": "2026-03-17T08:00:02.892567468Z",
+    "dikiVersion": "v0.24.0",
+    "providers": [
+        {
+            "id": "managedk8s",
+            "name": "Managed Kubernetes",
+            "rulesets": [
+                {
+                    "id": "disa-kubernetes-stig",
+                    "name": "DISA Kubernetes Security Technical Implementation Guide",
+                    "version": "v2r4",
+                    "rules": [
+                        {
+                            "id": "242431",
+                            "name": "Kubernetes etcd must have a key file for secure communication.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242427",
+                            "name": "Kubernetes etcd must have a key file for secure communication.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242412",
+                            "name": "The Kubernetes Controllers must enforce ports, protocols, and services (PPS) that adhere to the Ports, Protocols, and Services Management Category Assurance List (PPSM CAL).",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242432",
+                            "name": "Kubernetes etcd must have peer-cert-file set for secure communication.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242465",
+                            "name": "The Kubernetes API Server audit log path must be set.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Duplicate of 242402. The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242408",
+                            "name": "The Kubernetes manifest files must have least privileges.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "254801",
+                            "name": "Kubernetes must enable PodSecurity admission controller on static pods and Kubelets.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Option featureGates.PodSecurity was made GA in v1.25 and removed in v1.28."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "274882",
+                            "name": "Kubernetes Secrets must be encrypted at rest.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242403",
+                            "name": "Kubernetes API Server must generate audit records that identify what type of event has occurred, identify the source of the event, contain the event results, identify any users, and identify any containers associated with the event.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242417",
+                            "name": "Kubernetes must separate user functionality.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Failed",
+                                    "message": "Found user pods in system namespaces.",
+                                    "targets": [
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "coredns",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "diki-operator",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "ComplianceScan",
+                                            "name": "example-compliancescan",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kube-proxy",
+                                            "namespace": "kube-system"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242424",
+                            "name": "Kubernetes Kubelet must enable tlsPrivateKeyFile for client authentication to secure service.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Option tlsPrivateKeyFile set.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242430",
+                            "name": "Kubernetes etcd must have a certificate for communication.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242443",
+                            "name": "Kubernetes must contain the latest updates as authorized by IAVMs, CTOs, DTMs, and STIGs.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Scanning/patching security vulnerabilities should be enforced organizationally. Security vulnerability scanning should be automated and maintainers should be informed automatically."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242393",
+                            "name": "Kubernetes Worker Nodes must not have sshd service running.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "SSH daemon service not installed",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242404",
+                            "name": "Kubernetes Kubelet must deny hostname override.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Flag hostname-override not set.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242407",
+                            "name": "The Kubernetes kubelet configuration files must have file permissions set to 644 or more restrictive.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "File has expected permissions",
+                                    "targets": [
+                                        {
+                                            "details": "fileName: /etc/systemd/system/kubelet.service, permissions: 644",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "245542",
+                            "name": "Kubernetes API Server must disable basic authentication to protect information in transit.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242386",
+                            "name": "The Kubernetes API server must have the insecure port flag disabled.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242422",
+                            "name": "Kubernetes API Server must have a certificate for communication.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242438",
+                            "name": "Kubernetes API Server must configure timeouts to limit attack surface.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242389",
+                            "name": "The Kubernetes API server must have the secure port set.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242421",
+                            "name": "Kubernetes Controller Manager must have the SSL Certificate Authority set.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242399",
+                            "name": "Kubernetes DynamicKubeletConfig must not be enabled.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Option feature-gates.DynamicKubeletConfig removed in Kubernetes v1.26."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242419",
+                            "name": "Kubernetes API Server must have the SSL Certificate Authority set.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242381",
+                            "name": "The Kubernetes Controller Manager must create unique service accounts for each work payload.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "245543",
+                            "name": "Kubernetes API Server must disable token authentication to protect information in transit.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242376",
+                            "name": "The Kubernetes Controller Manager must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242385",
+                            "name": "The Kubernetes Controller Manager must have secure binding.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242449",
+                            "name": "The Kubernetes Kubelet certificate authority file must have file permissions set to 644 or more restrictive.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "File has expected permissions",
+                                    "targets": [
+                                        {
+                                            "details": "fileName: /etc/kubernetes/pki/ca.crt, permissions: 644",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242411",
+                            "name": "The Kubernetes Scheduler must enforce ports, protocols, and services (PPS) that adhere to the Ports, Protocols, and Services Management Category Assurance List (PPSM CAL).",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242451",
+                            "name": "The Kubernetes component PKI must be owned by root.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "File has expected owners",
+                                    "targets": [
+                                        {
+                                            "details": "fileName: /var/lib/kubelet/pki/kubelet-client-2026-03-17-07-34-12.pem, ownerUser: 0, ownerGroup: 0",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        },
+                                        {
+                                            "details": "fileName: /var/lib/kubelet/pki/kubelet.key, ownerUser: 0, ownerGroup: 0",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        },
+                                        {
+                                            "details": "fileName: /var/lib/kubelet/pki/kubelet.crt, ownerUser: 0, ownerGroup: 0",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        },
+                                        {
+                                            "details": "fileName: /var/lib/kubelet/pki, ownerUser: 0, ownerGroup: 0",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "status": "Errored",
+                                    "message": "kube-proxy pods not found"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242378",
+                            "name": "The Kubernetes API Server must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242379",
+                            "name": "The Kubernetes etcd must use TLS to protect the confidentiality of sensitive data during electronic dissemination.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242383",
+                            "name": "Kubernetes must separate user functionality.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "System resource in system namespaces.",
+                                    "targets": [
+                                        {
+                                            "kind": "Service",
+                                            "name": "kubernetes",
+                                            "namespace": "default"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242410",
+                            "name": "The Kubernetes API Server must enforce ports, protocols, and services (PPS) that adhere to the Ports, Protocols, and Services Management Category Assurance List (PPSM CAL).",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242415",
+                            "name": "Secrets in Kubernetes must not be stored as environment variables.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Pod does not use environment to inject secret.",
+                                    "targets": [
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "coredns",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Pod",
+                                            "name": "diki-242396-936a9tfmb2",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Pod",
+                                            "name": "diki-242450-odwkqxki7b",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Pod",
+                                            "name": "diki-242453-8htc23ym6w",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Pod",
+                                            "name": "diki-242467-qe1jdn4i76",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "diki-operator",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "ComplianceScan",
+                                            "name": "example-compliancescan",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kube-proxy",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "local-path-provisioner",
+                                            "namespace": "local-path-storage"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242418",
+                            "name": "The Kubernetes API server must use approved cipher suites.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242442",
+                            "name": "Kubernetes must remove old components after updated versions have been installed.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Errored",
+                                    "message": "kube-proxy pods not found"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242448",
+                            "name": "The Kubernetes Kube Proxy kubeconfig must be owned by root.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Errored",
+                                    "message": "kube-proxy pods not found"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242395",
+                            "name": "Kubernetes dashboard must not be enabled.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Kubernetes dashboard not installed"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242400",
+                            "name": "The Kubernetes API server must have Alpha APIs disabled.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Option featureGates.AllAlpha not set.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "status": "Errored",
+                                    "message": "kube-proxy pods not found"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242402",
+                            "name": "The Kubernetes API Server must have an audit log path set.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242414",
+                            "name": "The Kubernetes cluster must use non-privileged host ports for user pods.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Pod does not have container using hostPort \u003c 1024.",
+                                    "targets": [
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "coredns",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Pod",
+                                            "name": "diki-242396-936a9tfmb2",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Pod",
+                                            "name": "diki-242450-odwkqxki7b",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Pod",
+                                            "name": "diki-242453-8htc23ym6w",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Pod",
+                                            "name": "diki-242467-qe1jdn4i76",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "diki-operator",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "ComplianceScan",
+                                            "name": "example-compliancescan",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kube-proxy",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "local-path-provisioner",
+                                            "namespace": "local-path-storage"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242459",
+                            "name": "The Kubernetes etcd must have file permissions set to 644 or more restrictive.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242460",
+                            "name": "The Kubernetes admin kubeconfig must have file permissions set to 644 or more restrictive.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242382",
+                            "name": "The Kubernetes API Server must enable Node,RBAC as the authorization mode.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242396",
+                            "name": "Kubernetes Kubectl cp command must give expected access and results.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Node uses allowed kubectl version",
+                                    "targets": [
+                                        {
+                                            "details": "Kubectl client version 1.35.0",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242398",
+                            "name": "Kubernetes DynamicAuditing must not be enabled.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Option feature-gates.DynamicAuditing was removed in Kubernetes v1.19."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242420",
+                            "name": "Kubernetes Kubelet must have the SSL Certificate Authority set.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Option authentication.x509.clientCAFile set.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242434",
+                            "name": "Kubernetes Kubelet must enable kernel protection.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Failed",
+                                    "message": "Option protectKernelDefaults not set.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242446",
+                            "name": "The Kubernetes conf files must be owned by root.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242462",
+                            "name": "The Kubernetes API Server must be set to audit log max size.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "274883",
+                            "name": "Sensitive information must be stored using Kubernetes Secrets or an external Secret store provider.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Cannot be tested with confidence and should be enforced organizationally."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242380",
+                            "name": "The Kubernetes etcd must use TLS to protect the confidentiality of sensitive data during electronic dissemination.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242390",
+                            "name": "The Kubernetes API server must have anonymous authentication disabled.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Failed",
+                                    "message": "The kube-apiserver has anonymous authentication enabled."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242426",
+                            "name": "Kubernetes etcd must enable client authentication to secure service.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242436",
+                            "name": "The Kubernetes API server must have the ValidatingAdmissionWebhook enabled.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242454",
+                            "name": "The Kubernetes kubeadm.conf must be owned by root.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Gardener does not use kubeadm and also does not store any \"main config\" anywhere (flow/component logic built-in/in-code)."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "245541",
+                            "name": "Kubernetes Kubelet must not disable timeouts.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Option streamingConnectionIdleTimeout set to allowed, but not recommended value (should be 5m).",
+                                    "targets": [
+                                        {
+                                            "details": "streamingConnectionIdleTimeout set to 4h0m0s.",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "274884",
+                            "name": "Kubernetes must limit Secret access on a need-to-know basis.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Cannot be tested with confidence and should be enforced organizationally."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242384",
+                            "name": "The Kubernetes Scheduler must have secure binding.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242409",
+                            "name": "Kubernetes Controller Manager must disable profiling.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242423",
+                            "name": "Kubernetes etcd must enable client authentication to secure service.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242445",
+                            "name": "The Kubernetes component etcd must be owned by etcd.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242453",
+                            "name": "The Kubernetes kubelet KubeConfig file must be owned by root.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "File has expected owners",
+                                    "targets": [
+                                        {
+                                            "details": "fileName: /etc/kubernetes/kubelet.conf, ownerUser: 0, ownerGroup: 0",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        },
+                                        {
+                                            "details": "fileName: /var/lib/kubelet/config.yaml, ownerUser: 0, ownerGroup: 0",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242377",
+                            "name": "The Kubernetes Scheduler must use TLS 1.2, at a minimum, to protect the confidentiality of sensitive data during electronic dissemination.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242413",
+                            "name": "The Kubernetes etcd must enforce ports, protocols, and services (PPS) that adhere to the Ports, Protocols, and Services Management Category Assurance List (PPSM CAL).",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242467",
+                            "name": "The Kubernetes PKI keys must have file permissions set to 600 or more restrictive.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "File has expected permissions",
+                                    "targets": [
+                                        {
+                                            "details": "fileName: /var/lib/kubelet/pki/kubelet-client-2026-03-17-07-34-12.pem, permissions: 600",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        },
+                                        {
+                                            "details": "fileName: /var/lib/kubelet/pki/kubelet.key, permissions: 600",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "status": "Errored",
+                                    "message": "kube-proxy pods not found"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242429",
+                            "name": "Kubernetes etcd must have the SSL Certificate Authority set.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242456",
+                            "name": "The Kubernetes kubelet config must have file permissions set to 644 or more restrictive.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Duplicate of 242452."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242464",
+                            "name": "The Kubernetes API Server audit log retention must be set.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242425",
+                            "name": "Kubernetes Kubelet must enable tlsCertFile for client authentication to secure service.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Option tlsCertFile set.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242391",
+                            "name": "The Kubernetes Kubelet must have anonymous authentication disabled.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Option authentication.anonymous.enabled set to allowed value.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242397",
+                            "name": "The Kubernetes kubelet staticPodPath must not enable static pods.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Failed",
+                                    "message": "Option staticPodPath set.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242437",
+                            "name": "Kubernetes must have a pod security policy set.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "PSPs are removed in K8s version 1.25."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242447",
+                            "name": "The Kubernetes Kube Proxy kubeconfig must have file permissions set to 644 or more restrictive.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Errored",
+                                    "message": "kube-proxy pods not found"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242461",
+                            "name": "Kubernetes API Server audit logs must be enabled.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "254800",
+                            "name": "Kubernetes must have a Pod Security Admission control file configured.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242433",
+                            "name": "Kubernetes etcd must have a peer-key-file set for secure communication.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242455",
+                            "name": "The Kubernetes kubeadm.conf must have file permissions set to 644 or more restrictive.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Gardener does not use kubeadm and also does not store any \"main config\" anywhere (flow/component logic built-in/in-code)."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242463",
+                            "name": "The Kubernetes API Server must be set to audit log maximum backup.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "245544",
+                            "name": "Kubernetes endpoints must use approved organizational certificate and key pair to protect information in transit.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242450",
+                            "name": "The Kubernetes Kubelet certificate authority must be owned by root.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "File has expected owners",
+                                    "targets": [
+                                        {
+                                            "details": "fileName: /etc/kubernetes/pki/ca.crt, ownerUser: 0, ownerGroup: 0",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242405",
+                            "name": "Kubernetes manifests must be owned by root.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242428",
+                            "name": "Kubernetes etcd must have a certificate for communication.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242444",
+                            "name": "Kubernetes component manifests must be owned by root.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Rule is duplicate of 242405. The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242457",
+                            "name": "The Kubernetes kubelet config must be owned by root.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "Duplicate of 242453."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242392",
+                            "name": "The Kubernetes kubelet must enable explicit authorization.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Option authorization.mode set to allowed value.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242394",
+                            "name": "Kubernetes Worker Nodes must not have the sshd service enabled.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "SSH daemon service not installed",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242388",
+                            "name": "The Kubernetes API server must have the insecure bind address not set.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Skipped",
+                                    "message": "The Managed Kubernetes cluster does not have access to control plane components."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242387",
+                            "name": "The Kubernetes Kubelet must have the \"readOnlyPort\" flag disabled.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Option readOnlyPort not set.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242406",
+                            "name": "The Kubernetes kubelet configuration file must be owned by root.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "File has expected owners",
+                                    "targets": [
+                                        {
+                                            "details": "fileName: /etc/systemd/system/kubelet.service, ownerUser: 0, ownerGroup: 0",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242452",
+                            "name": "The Kubernetes kubelet KubeConfig must have file permissions set to 644 or more restrictive.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "File has expected permissions",
+                                    "targets": [
+                                        {
+                                            "details": "fileName: /etc/kubernetes/kubelet.conf, permissions: 600",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        },
+                                        {
+                                            "details": "fileName: /var/lib/kubelet/config.yaml, permissions: 644",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "242466",
+                            "name": "The Kubernetes PKI CRT must have file permissions set to 644 or more restrictive.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "File has expected permissions",
+                                    "targets": [
+                                        {
+                                            "details": "fileName: /var/lib/kubelet/pki/kubelet-client-2026-03-17-07-34-12.pem, permissions: 600",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        },
+                                        {
+                                            "details": "fileName: /var/lib/kubelet/pki/kubelet.crt, permissions: 644",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "status": "Errored",
+                                    "message": "kube-proxy pods not found"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "security-hardened-k8s",
+                    "name": "Security Hardened Kubernetes Cluster",
+                    "version": "v0.1.0",
+                    "rules": [
+                        {
+                            "id": "2002",
+                            "name": "Storage Classes should have a \"Delete\" reclaim policy.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "StorageClass has a Delete ReclaimPolicy set.",
+                                    "targets": [
+                                        {
+                                            "kind": "StorageClass",
+                                            "name": "standard"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "2004",
+                            "name": "Limit the Services of type NodePort.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Service is not of type NodePort.",
+                                    "targets": [
+                                        {
+                                            "kind": "Service",
+                                            "name": "kubernetes",
+                                            "namespace": "default"
+                                        },
+                                        {
+                                            "kind": "Service",
+                                            "name": "diki-operator",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Service",
+                                            "name": "kube-dns",
+                                            "namespace": "kube-system"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "2005",
+                            "name": "Container images must come from trusted repositories.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Failed",
+                                    "message": "There are no allowed images in rule options."
+                                }
+                            ]
+                        },
+                        {
+                            "id": "2000",
+                            "name": "Ingress and egress traffic must be restricted by default.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Failed",
+                                    "message": "Egress traffic is not denied by default.",
+                                    "targets": [
+                                        {
+                                            "namespace": "default"
+                                        },
+                                        {
+                                            "namespace": "kube-node-lease"
+                                        },
+                                        {
+                                            "namespace": "kube-public"
+                                        },
+                                        {
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "namespace": "local-path-storage"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "status": "Failed",
+                                    "message": "Ingress traffic is not denied by default.",
+                                    "targets": [
+                                        {
+                                            "namespace": "default"
+                                        },
+                                        {
+                                            "namespace": "kube-node-lease"
+                                        },
+                                        {
+                                            "namespace": "kube-public"
+                                        },
+                                        {
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "namespace": "local-path-storage"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "2001",
+                            "name": "Containers must be forbidden to escalate privileges.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Failed",
+                                    "message": "Pod must not escalate privileges.",
+                                    "targets": [
+                                        {
+                                            "container": "report-reader",
+                                            "kind": "ComplianceScan",
+                                            "name": "example-compliancescan",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "container": "diki-scan",
+                                            "kind": "ComplianceScan",
+                                            "name": "example-compliancescan",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "container": "etcd",
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "container": "kindnet-cni",
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "container": "kube-proxy",
+                                            "kind": "DaemonSet",
+                                            "name": "kube-proxy",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "container": "local-path-provisioner",
+                                            "kind": "Deployment",
+                                            "name": "local-path-provisioner",
+                                            "namespace": "local-path-storage"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "status": "Passed",
+                                    "message": "Pod does not escalate privileges.",
+                                    "targets": [
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "coredns",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "diki-operator",
+                                            "namespace": "kube-system"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "2003",
+                            "name": "Pods should use only allowed volume types.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Pod uses only allowed volume types.",
+                                    "targets": [
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "coredns",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "diki-operator",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "ComplianceScan",
+                                            "name": "example-compliancescan",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "local-path-provisioner",
+                                            "namespace": "local-path-storage"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "status": "Failed",
+                                    "message": "Pod uses not allowed volume type.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane",
+                                            "namespace": "kube-system",
+                                            "volume": "etcd-certs"
+                                        },
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane",
+                                            "namespace": "kube-system",
+                                            "volume": "etcd-data"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system",
+                                            "volume": "cni-cfg"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system",
+                                            "volume": "xtables-lock"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system",
+                                            "volume": "lib-modules"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system",
+                                            "volume": "nri-plugin"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kube-proxy",
+                                            "namespace": "kube-system",
+                                            "volume": "xtables-lock"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kube-proxy",
+                                            "namespace": "kube-system",
+                                            "volume": "lib-modules"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "2007",
+                            "name": "Limit the use of wildcards in RBAC verbs.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Role does not use \"*\" in policy rule verbs.",
+                                    "targets": [
+                                        {
+                                            "kind": "Role",
+                                            "name": "kubeadm:bootstrap-signer-clusterinfo",
+                                            "namespace": "kube-public"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system:controller:bootstrap-signer",
+                                            "namespace": "kube-public"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "diki-operator",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "extension-apiserver-authentication-reader",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "kube-proxy",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "kubeadm:kubelet-config",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "kubeadm:nodes-kubeadm-config",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system::leader-locking-kube-controller-manager",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system::leader-locking-kube-scheduler",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system:controller:bootstrap-signer",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system:controller:cloud-provider",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system:controller:token-cleaner",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "local-path-provisioner-role",
+                                            "namespace": "local-path-storage"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "admin"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "diki-operator"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "diki-runner"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "edit"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "kindnet"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "kubeadm:get-nodes"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "local-path-provisioner-role"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:aggregate-to-admin"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:aggregate-to-edit"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:aggregate-to-view"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:auth-delegator"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:basic-user"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:certificatesigningrequests:nodeclient"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:certificatesigningrequests:selfnodeclient"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:kube-apiserver-client-approver"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:kube-apiserver-client-kubelet-approver"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:kubelet-serving-approver"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:legacy-unknown-approver"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:attachdetach-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:certificate-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:clusterrole-aggregation-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:cronjob-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:daemon-set-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:deployment-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:disruption-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:endpoint-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:endpointslice-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:endpointslicemirroring-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:ephemeral-volume-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:expand-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:generic-garbage-collector"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:horizontal-pod-autoscaler"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:job-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:legacy-service-account-token-cleaner"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:namespace-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:node-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:persistent-volume-binder"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:pod-garbage-collector"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:pv-protection-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:pvc-protection-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:replicaset-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:replication-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:resource-claim-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:resourcequota-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:root-ca-cert-publisher"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:route-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:selinux-warning-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:service-account-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:service-cidrs-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:service-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:statefulset-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:ttl-after-finished-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:ttl-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:validatingadmissionpolicy-status-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:volumeattributesclass-protection-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:coredns"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:discovery"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:heapster"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:kube-aggregator"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:kube-controller-manager"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:kube-dns"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:kube-scheduler"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:monitoring"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:node"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:node-bootstrapper"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:node-problem-detector"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:node-proxier"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:persistent-volume-provisioner"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:public-info-viewer"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:service-account-issuer-discovery"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:volume-scheduler"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "view"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "status": "Accepted",
+                                    "message": "ClusterRoles managed by Gardener are accepted to use wildcards in RBAC verbs.",
+                                    "targets": [
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "cluster-admin"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:kubelet-api-admin"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "2008",
+                            "name": "Pods must not mount host directories.",
+                            "severity": "High",
+                            "checks": [
+                                {
+                                    "status": "Failed",
+                                    "message": "Pod must not use volumes of type hostPath.",
+                                    "targets": [
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane",
+                                            "namespace": "kube-system",
+                                            "volume": "etcd-certs"
+                                        },
+                                        {
+                                            "kind": "Node",
+                                            "name": "local-diki-operator-control-plane",
+                                            "namespace": "kube-system",
+                                            "volume": "etcd-data"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system",
+                                            "volume": "cni-cfg"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system",
+                                            "volume": "xtables-lock"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system",
+                                            "volume": "lib-modules"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kindnet",
+                                            "namespace": "kube-system",
+                                            "volume": "nri-plugin"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kube-proxy",
+                                            "namespace": "kube-system",
+                                            "volume": "xtables-lock"
+                                        },
+                                        {
+                                            "kind": "DaemonSet",
+                                            "name": "kube-proxy",
+                                            "namespace": "kube-system",
+                                            "volume": "lib-modules"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "status": "Passed",
+                                    "message": "Pod does not use volumes of type hostPath.",
+                                    "targets": [
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "coredns",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "diki-operator",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "ComplianceScan",
+                                            "name": "example-compliancescan",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Deployment",
+                                            "name": "local-path-provisioner",
+                                            "namespace": "local-path-storage"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "2006",
+                            "name": "Limit the use of wildcards in RBAC resources.",
+                            "severity": "Medium",
+                            "checks": [
+                                {
+                                    "status": "Passed",
+                                    "message": "Role does not use \"*\" in policy rule resources.",
+                                    "targets": [
+                                        {
+                                            "kind": "Role",
+                                            "name": "kubeadm:bootstrap-signer-clusterinfo",
+                                            "namespace": "kube-public"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system:controller:bootstrap-signer",
+                                            "namespace": "kube-public"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "diki-operator",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "extension-apiserver-authentication-reader",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "kube-proxy",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "kubeadm:kubelet-config",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "kubeadm:nodes-kubeadm-config",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system::leader-locking-kube-controller-manager",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system::leader-locking-kube-scheduler",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system:controller:bootstrap-signer",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system:controller:cloud-provider",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "system:controller:token-cleaner",
+                                            "namespace": "kube-system"
+                                        },
+                                        {
+                                            "kind": "Role",
+                                            "name": "local-path-provisioner-role",
+                                            "namespace": "local-path-storage"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "admin"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "diki-operator"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "diki-runner"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "edit"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "kindnet"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "kubeadm:get-nodes"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "local-path-provisioner-role"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:aggregate-to-admin"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:aggregate-to-edit"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:aggregate-to-view"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:auth-delegator"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:basic-user"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:certificatesigningrequests:nodeclient"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:certificatesigningrequests:selfnodeclient"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:kube-apiserver-client-approver"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:kube-apiserver-client-kubelet-approver"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:kubelet-serving-approver"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:certificates.k8s.io:legacy-unknown-approver"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:attachdetach-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:certificate-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:clusterrole-aggregation-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:cronjob-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:daemon-set-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:deployment-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:endpoint-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:endpointslice-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:endpointslicemirroring-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:ephemeral-volume-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:expand-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:job-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:legacy-service-account-token-cleaner"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:node-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:persistent-volume-binder"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:pod-garbage-collector"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:pv-protection-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:pvc-protection-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:replicaset-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:replication-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:resource-claim-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:root-ca-cert-publisher"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:route-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:selinux-warning-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:service-account-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:service-cidrs-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:service-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:statefulset-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:ttl-after-finished-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:ttl-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:validatingadmissionpolicy-status-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:volumeattributesclass-protection-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:coredns"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:discovery"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:heapster"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:kube-aggregator"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:kube-dns"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:kube-scheduler"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:kubelet-api-admin"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:monitoring"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:node"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:node-bootstrapper"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:node-problem-detector"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:node-proxier"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:persistent-volume-provisioner"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:public-info-viewer"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:service-account-issuer-discovery"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:volume-scheduler"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "view"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "status": "Accepted",
+                                    "message": "Kubernetes default ClusterRoles are accepted to use wildcards in RBAC resources.",
+                                    "targets": [
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "cluster-admin"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:disruption-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:generic-garbage-collector"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:horizontal-pod-autoscaler"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:namespace-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:controller:resourcequota-controller"
+                                        },
+                                        {
+                                            "kind": "ClusterRole",
+                                            "name": "system:kube-controller-manager"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

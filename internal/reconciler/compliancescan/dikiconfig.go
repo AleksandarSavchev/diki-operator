@@ -18,7 +18,9 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	"github.com/gardener/diki-operator/internal/utils"
 	"github.com/gardener/diki-operator/pkg/apis/diki/v1alpha1"
+	exporterv1alpha1 "github.com/gardener/diki-operator/pkg/apis/dikiexporter/v1alpha1"
 )
 
 func (r *Reconciler) deployDikiConfigMap(ctx context.Context, complianceScan *v1alpha1.ComplianceScan) (*corev1.ConfigMap, error) {
@@ -100,6 +102,49 @@ func (r *Reconciler) deployDikiConfigMap(ctx context.Context, complianceScan *v1
 	}
 
 	return configMap, nil
+}
+
+func (r *Reconciler) deployExporterConfigSecret(ctx context.Context, complianceScan *v1alpha1.ComplianceScan, reportOutputs []v1alpha1.ReportOutput) (*corev1.Secret, error) {
+	outputs := []exporterv1alpha1.Output{}
+	for _, reportOutput := range reportOutputs {
+		outputs = append(outputs, exporterv1alpha1.Output{
+			Name:   reportOutput.Name,
+			Type:   exporterv1alpha1.ExporterTypeConfigMap,
+			Config: utils.ToRawExtension(reportOutput),
+		})
+	}
+
+	exporterConfig := &exporterv1alpha1.DikiExporterConfiguration{
+		ReportPath:         "./example/report.json",
+		ComplianceScanName: complianceScan.Name,
+		Outputs:            outputs,
+	}
+
+	var buf bytes.Buffer
+	encoder := yaml.NewEncoder(&buf)
+	encoder.SetIndent(2)
+	if err := encoder.Encode(exporterConfig); err != nil {
+		return nil, fmt.Errorf("failed to marshal exporter config: %w", err)
+	}
+	exporterConfigYAML := buf.Bytes()
+
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			GenerateName: ExporterConfigSecretGenerateNamePrefix,
+			Namespace:    r.Config.DikiRunner.Namespace,
+			//OwnerReferences: r.getOwnerReference(job),
+			Labels: r.getLabels(complianceScan),
+		},
+		Data: map[string][]byte{
+			ExporterSecretKey: exporterConfigYAML,
+		},
+	}
+
+	if err := r.Client.Create(ctx, secret); err != nil {
+		return nil, fmt.Errorf("failed to create diki config configMap: %w", err)
+	}
+
+	return secret, nil
 }
 
 func (r *Reconciler) getRuleOptions(ctx context.Context, options *v1alpha1.RulesetOptions, rulesetID string) ([]dikiconfig.RuleOptionsConfig, error) {

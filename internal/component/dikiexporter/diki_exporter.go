@@ -13,10 +13,10 @@ import (
 
 	dikireport "github.com/gardener/diki/pkg/report"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	dikioutputs "github.com/gardener/diki-operator/internal/component/dikiexporter/outputs"
+	"github.com/gardener/diki-operator/internal/utils"
 	dikiv1alpha1 "github.com/gardener/diki-operator/pkg/apis/diki/v1alpha1"
 	"github.com/gardener/diki-operator/pkg/apis/dikiexporter/v1alpha1"
 )
@@ -79,7 +79,7 @@ func (d *DikiExporter) Export(ctx context.Context) error {
 						Name: name,
 					},
 					Phase:   dikiv1alpha1.OutputStatusFailed,
-					Details: toRawExtension(newErroredExport(err)),
+					Details: utils.ToRawExtension(newErroredExport(err)),
 				}
 			} else {
 				outputStatusChan <- dikiv1alpha1.OutputStatus{
@@ -87,7 +87,7 @@ func (d *DikiExporter) Export(ctx context.Context) error {
 						Name: name,
 					},
 					Phase:   dikiv1alpha1.OutputStatusCompleted,
-					Details: toRawExtension(details),
+					Details: utils.ToRawExtension(details),
 				}
 			}
 		}(output)
@@ -144,18 +144,4 @@ func (d *DikiExporter) readDikiReport() (*dikireport.Report, error) {
 	}
 
 	return &report, nil
-}
-
-func toRawExtension(v any) runtime.RawExtension {
-	if v == nil {
-		return runtime.RawExtension{}
-	}
-
-	data, err := json.Marshal(v)
-	if err != nil {
-		errData, _ := json.Marshal(map[string]string{"error": fmt.Sprintf("failed to marshal details: %v", err)})
-		return runtime.RawExtension{Raw: errData}
-	}
-
-	return runtime.RawExtension{Raw: data}
 }

@@ -6,16 +6,17 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gardener/diki-operator/pkg/apis/diki/v1alpha1"
 	"github.com/gardener/gardener/pkg/utils/retry"
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/ptr"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	"github.com/gardener/diki-operator/pkg/apis/diki/v1alpha1"
 )
 
-func (r *Reconciler) deployDikiRunner(ctx context.Context, dikiImage, dikiOpsImage, dikiConfigMapName string, complianceScan *v1alpha1.ComplianceScan) (*corev1.Pod, error) {
+func (r *Reconciler) deployDikiRunner(ctx context.Context, dikiImage, dikiExporterImage, dikiConfigMapName, dikiExporterConfigSecretName string, complianceScan *v1alpha1.ComplianceScan) (*corev1.Pod, error) {
 	pod := &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			GenerateName: "diki-runner-",
@@ -59,13 +60,19 @@ func (r *Reconciler) deployDikiRunner(ctx context.Context, dikiImage, dikiOpsIma
 			},
 			Containers: []corev1.Container{
 				{
-					Name:    "report-reader",
-					Image:   dikiOpsImage,
-					Command: []string{"cat", "/output/report.json"},
+					Name:  "diki-exporter",
+					Image: dikiExporterImage,
+					Args: []string{
+						"-o", "/config/exporter-config.yaml",
+					},
 					VolumeMounts: []corev1.VolumeMount{
 						{
 							Name:      "shared-volume",
 							MountPath: "/output",
+						},
+						{
+							Name:      "exporter-config",
+							MountPath: "/config",
 						},
 					},
 				},
@@ -84,6 +91,14 @@ func (r *Reconciler) deployDikiRunner(ctx context.Context, dikiImage, dikiOpsIma
 							LocalObjectReference: corev1.LocalObjectReference{
 								Name: dikiConfigMapName,
 							},
+						},
+					},
+				},
+				{
+					Name: "exporter-config",
+					VolumeSource: corev1.VolumeSource{
+						Secret: &corev1.SecretVolumeSource{
+							SecretName: dikiExporterConfigSecretName,
 						},
 					},
 				},

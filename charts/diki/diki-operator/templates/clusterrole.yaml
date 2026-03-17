@@ -16,6 +16,7 @@ rules:
   resources:
   - compliancescans
   - compliancescans/status
+  - reportoutputs
   verbs:
   - get
   - list

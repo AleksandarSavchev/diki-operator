@@ -10,6 +10,7 @@ import (
 	"time"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -65,26 +66,46 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 
 	log.Info("Updated ComplianceScan phase to Running")
 
-	configMap, err := r.deployDikiConfigMap(ctx, complianceScan)
+	reportOutputs := []v1alpha1.ReportOutput{}
+	// WE get the reportOutput
+	for _, output := range complianceScan.Spec.Outputs {
+
+		reportOutputObj := &v1alpha1.ReportOutput{
+			ObjectMeta: v1.ObjectMeta{
+				Name: output.Name,
+			},
+		}
+		if err := r.Client.Get(ctx, client.ObjectKeyFromObject(reportOutputObj), reportOutputObj); err != nil {
+			return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
+		}
+		reportOutputs = append(reportOutputs, *reportOutputObj)
+	}
+
+	dikiConfigMap, err := r.deployDikiConfigMap(ctx, complianceScan)
 	if err != nil {
 		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
 	}
+	log.Info(fmt.Sprintf("Created ConfigMap %s", client.ObjectKeyFromObject(dikiConfigMap)))
 
-	log.Info(fmt.Sprintf("Created ConfigMap %s", client.ObjectKeyFromObject(configMap)))
+	exporterConfigSecret, err := r.deployExporterConfigSecret(ctx, complianceScan, reportOutputs)
+	if err != nil {
+		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
+	}
+	log.Info(fmt.Sprintf("Created Secret %s", client.ObjectKeyFromObject(exporterConfigSecret)))
 
 	dikiImage, err := imagevector.ImageVector().FindImage("diki")
 	if err != nil {
 		log.Error(err, "failed to find image version for diki")
 		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, fmt.Errorf("failed to find image version for %s: %w", "diki-runner", err))
 	}
-	dikiOpsImage, err := imagevector.ImageVector().FindImage("diki-ops")
+	dikiExporterImage, err := imagevector.ImageVector().FindImage("diki-exporter")
 	if err != nil {
-		log.Error(err, "failed to find image version for diki-ops")
-		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, fmt.Errorf("failed to find image version for %s: %w", "diki-runner", err))
+		log.Error(err, "failed to find image version for diki-exporter")
+		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, fmt.Errorf("failed to find image version for %s: %w", "diki-exporter", err))
 	}
 
 	// TODO(AleksandarSavchev): Create diki-runner job here.
-	dikiRunner, err := r.deployDikiRunner(ctx, dikiImage.String(), dikiOpsImage.String(), configMap.Name, complianceScan)
+	dikiRunner, err := r.deployDikiRunner(ctx, dikiImage.String(), dikiExporterImage.String(), dikiConfigMap.Name, exporterConfigSecret.Name, complianceScan)
 	if err != nil {
 		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
 	}

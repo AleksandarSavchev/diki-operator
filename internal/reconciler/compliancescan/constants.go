@@ -20,9 +20,12 @@ const (
 
 	// ConfigMapGenerateNamePrefix is the prefix for diki config ConfigMap names.
 	ConfigMapGenerateNamePrefix = "diki-config-"
+	// ExporterConfigSecretGenerateNamePrefix is the prefix for diki config ConfigMap names.
+	ExporterConfigSecretGenerateNamePrefix = "exporter-config-"
 	// DikiConfigKey is the key used to store the YAML configuration in the ConfigMap data.
 	DikiConfigKey = "config.yaml"
-
+	// DikiExporterConfigKey is the key used to store the YAML configuration in the Secret data.
+	ExporterSecretKey = "exporter-config.yaml"
 	// RuleOptionsSuffix is the suffix appended to ruleset IDs when looking up rule options in ConfigMaps.
 	RuleOptionsSuffix = "-rules"
 

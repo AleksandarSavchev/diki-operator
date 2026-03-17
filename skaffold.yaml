@@ -10,17 +10,27 @@ build:
           paths:
             - cmd/diki-operator
             - cmd/diki-operator/app
+            - imagevector
+            - imagevector/images.yaml
             - internal/reconciler/compliancescan
+            - internal/utils
             - pkg/apis/config/v1alpha1
             - pkg/apis/config/v1alpha1/validation
             - pkg/apis/diki
             - pkg/apis/diki/install
             - pkg/apis/diki/v1alpha1
             - pkg/apis/diki/v1alpha1/helper
+            - pkg/apis/dikiexporter/v1alpha1
             - VERSION
         ldflags:
           - '{{.LD_FLAGS}}'
         main: ./cmd/diki-operator
+    - image: local-skaffold/diki-exporter
+      ko:
+        dependencies:
+        ldflags:
+          - '{{.LD_FLAGS}}'
+        main: ./cmd/diki-exporter
   tagPolicy:
     customTemplate:
       template: '{{.version}}-{{.sha}}'
