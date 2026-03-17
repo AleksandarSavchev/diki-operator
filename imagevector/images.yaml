@@ -8,3 +8,9 @@ images:
   sourceRepository: github.com/gardener/diki
   repository: europe-docker.pkg.dev/gardener-project/releases/gardener/diki
   tag: "v0.24.0"
+# TODO (georgibaltiev): change the image after the PoC starts working
+- name: diki-ops
+  sourceRepository: github.com/gardener/diki
+  # Change to diki-ops image when it has sleep & cat commands
+  repository: alpine
+  tag: "latest"

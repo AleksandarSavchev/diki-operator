@@ -26,6 +26,7 @@ import (
 	"k8s.io/utils/clock"
 	"k8s.io/utils/ptr"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/cache"
 	controllerconfig "sigs.k8s.io/controller-runtime/pkg/config"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -99,6 +100,11 @@ func run(ctx context.Context, log logr.Logger, cfg *configv1alpha1.DikiOperatorC
 		Logger: log.WithName("manager"),
 		Metrics: metricsserver.Options{
 			BindAddress: net.JoinHostPort(cfg.Server.Metrics.BindAddress, strconv.Itoa(int(cfg.Server.Metrics.Port))),
+		},
+		Cache: cache.Options{
+			DefaultNamespaces: map[string]cache.Config{
+				"kube-system": cache.Config{},
+			},
 		},
 		GracefulShutdownTimeout: ptr.To(5 * time.Second),
 

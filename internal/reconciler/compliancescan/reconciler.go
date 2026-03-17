@@ -16,6 +16,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
+	"github.com/gardener/diki-operator/imagevector"
 	configv1alpha1 "github.com/gardener/diki-operator/pkg/apis/config/v1alpha1"
 	"github.com/gardener/diki-operator/pkg/apis/diki/v1alpha1"
 	dikiv1alpha1helper "github.com/gardener/diki-operator/pkg/apis/diki/v1alpha1/helper"
@@ -64,14 +65,36 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 
 	log.Info("Updated ComplianceScan phase to Running")
 
-	// TODO(AleksandarSavchev): Create diki-runner job here.
-
 	configMap, err := r.deployDikiConfigMap(ctx, complianceScan)
 	if err != nil {
 		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
 	}
 
 	log.Info(fmt.Sprintf("Created ConfigMap %s", client.ObjectKeyFromObject(configMap)))
+
+	dikiImage, err := imagevector.ImageVector().FindImage("diki")
+	if err != nil {
+		log.Error(err, "failed to find image version for diki")
+		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, fmt.Errorf("failed to find image version for %s: %w", "diki-runner", err))
+	}
+	dikiOpsImage, err := imagevector.ImageVector().FindImage("diki-ops")
+	if err != nil {
+		log.Error(err, "failed to find image version for diki-ops")
+		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, fmt.Errorf("failed to find image version for %s: %w", "diki-runner", err))
+	}
+
+	// TODO(AleksandarSavchev): Create diki-runner job here.
+	dikiRunner, err := r.deployDikiRunner(ctx, dikiImage.String(), dikiOpsImage.String(), configMap.Name, complianceScan)
+	if err != nil {
+		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
+	}
+	log.Info(fmt.Sprintf("Created runner pod %s", client.ObjectKeyFromObject(dikiRunner)))
+
+	if err := r.waitPodCompleted(ctx, dikiRunner.Name, dikiRunner.Namespace, log); err != nil {
+		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, fmt.Errorf("diki runner pod did not become healthy: %w", err))
+	}
+
+	log.Info(fmt.Sprintf("Pod %s completed", client.ObjectKeyFromObject(dikiRunner)))
 
 	// Update phase to Completed
 	patch = client.MergeFrom(complianceScan.DeepCopy())

@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# TODO: split the charts here
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: diki-runner
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: diki-operator
+    helm.sh/chart: diki-operator
+    app.kubernetes.io/instance: {{ .Release.Name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: diki-runner
+subjects:
+- kind: ServiceAccount
+  name: diki-runner
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: diki-runner
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: diki-operator
+    helm.sh/chart: diki-operator
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
