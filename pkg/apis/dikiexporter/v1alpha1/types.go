@@ -40,4 +40,6 @@ type OutputType string
 const (
 	// ExporterTypeConfigMap is the type for exporting reports to a ConfigMap.
 	ExporterTypeConfigMap OutputType = "ConfigMap"
+	// ExporterTypePostgres is the type for exporting reports to a Postgres database.
+	ExporterTypePostgres OutputType = "Postgres"
 )

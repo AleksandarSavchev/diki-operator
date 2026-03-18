@@ -41,6 +41,16 @@ type ReportOutputSpec struct {
 type Output struct {
 	// ConfigMap contains the configuration for exporting the report to a ConfigMap.
 	ConfigMap *ConfigMapOutput
+	// Postgres contains the configuration for exporting the report to a Postgres database.
+	// +optional
+	Postgres *PostgresOutput `json:"postgres,omitempty"`
+}
+
+type PostgresOutput struct {
+	// ConnectionString is the connection string for the Postgres database.
+	ConnectionString string `json:"connectionString"`
+	// TableName is the name of the table where the report will be stored.
+	TableName string `json:"tableName"`
 }
 
 // ConfigMapOutput contains the configuration for exporting the report to a ConfigMap.
