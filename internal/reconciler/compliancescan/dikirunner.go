@@ -63,7 +63,7 @@ func (r *Reconciler) deployDikiRunner(ctx context.Context, dikiImage, dikiExport
 					Name:  "diki-exporter",
 					Image: dikiExporterImage,
 					Args: []string{
-						"-o", "/config/exporter-config.yaml",
+						"--config", "/config/exporter-config.yaml",
 					},
 					VolumeMounts: []corev1.VolumeMount{
 						{

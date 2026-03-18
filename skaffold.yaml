@@ -49,5 +49,10 @@ deploy:
         setValueTemplates:
           image.repository: '{{.IMAGE_REPO_local_skaffold_diki_operator}}'
           image.tag: '{{.IMAGE_TAG_local_skaffold_diki_operator}}@{{.IMAGE_DIGEST_local_skaffold_diki_operator}}'
+          imageVectorOverwrite: |
+            images:
+            - name: diki-exporter
+              repository: {{.IMAGE_REPO_local_skaffold_diki_exporter}}
+              tag: {{.IMAGE_TAG_local_skaffold_diki_exporter}}
         createNamespace: false
         wait: true

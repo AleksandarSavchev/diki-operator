@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
+{{- if .Values.imageVectorOverwrite }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: diki-operator-imagevector-overwrite
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: diki-operator
+    helm.sh/chart: diki-operator
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  images_overwrite.yaml: |
+{{ .Values.imageVectorOverwrite | indent 4 }}
+{{- end }}

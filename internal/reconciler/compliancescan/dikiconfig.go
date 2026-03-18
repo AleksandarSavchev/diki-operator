@@ -7,6 +7,7 @@ package reconciler
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 
 	dikiconfig "github.com/gardener/diki/pkg/config"
@@ -110,20 +111,32 @@ func (r *Reconciler) deployExporterConfigSecret(ctx context.Context, complianceS
 		outputs = append(outputs, exporterv1alpha1.Output{
 			Name:   reportOutput.Name,
 			Type:   exporterv1alpha1.ExporterTypeConfigMap,
-			Config: utils.ToRawExtension(reportOutput),
+			Config: utils.ToRawExtension(reportOutput.Spec.Output.ConfigMap),
 		})
 	}
 
 	exporterConfig := &exporterv1alpha1.DikiExporterConfiguration{
-		ReportPath:         "./example/report.json",
+		ReportPath:         "/output/report.json",
 		ComplianceScanName: complianceScan.Name,
 		Outputs:            outputs,
+	}
+
+	// JSON-marshal first so that runtime.RawExtension's custom MarshalJSON
+	// embeds the config inline instead of producing a raw byte array.
+	jsonBytes, err := json.Marshal(exporterConfig)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal exporter config to JSON: %w", err)
+	}
+
+	var generic any
+	if err := json.Unmarshal(jsonBytes, &generic); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal exporter config from JSON: %w", err)
 	}
 
 	var buf bytes.Buffer
 	encoder := yaml.NewEncoder(&buf)
 	encoder.SetIndent(2)
-	if err := encoder.Encode(exporterConfig); err != nil {
+	if err := encoder.Encode(generic); err != nil {
 		return nil, fmt.Errorf("failed to marshal exporter config: %w", err)
 	}
 	exporterConfigYAML := buf.Bytes()

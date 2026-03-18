@@ -38,6 +38,11 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
         - --config=/etc/diki-operator/config/config.yaml
+        {{- if .Values.imageVectorOverwrite }}
+        env:
+        - name: IMAGEVECTOR_OVERWRITE
+          value: /etc/diki-operator/imagevector-overwrite/images_overwrite.yaml
+        {{- end }}
         ports:
         - name: health
           containerPort: {{ .Values.config.server.healthProbes.port }}
@@ -55,6 +60,11 @@ spec:
         - name: diki-operator-config
           mountPath: /etc/diki-operator/config
           readOnly: true
+        {{- if .Values.imageVectorOverwrite }}
+        - name: imagevector-overwrite
+          mountPath: /etc/diki-operator/imagevector-overwrite
+          readOnly: true
+        {{- end }}
         livenessProbe:
           httpGet:
             path: /healthz
@@ -76,3 +86,9 @@ spec:
         configMap:
           defaultMode: 0440
           name: diki-operator
+      {{- if .Values.imageVectorOverwrite }}
+      - name: imagevector-overwrite
+        configMap:
+          defaultMode: 0440
+          name: diki-operator-imagevector-overwrite
+      {{- end }}
