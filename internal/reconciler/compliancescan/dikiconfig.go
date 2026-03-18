@@ -93,7 +93,7 @@ func (r *Reconciler) deployDikiConfigMap(ctx context.Context, complianceScan *v1
 		ObjectMeta: metav1.ObjectMeta{
 			GenerateName: ConfigMapGenerateNamePrefix,
 			Namespace:    r.Config.DikiRunner.Namespace,
-			//OwnerReferences: r.getOwnerReference(job),
+			// OwnerReferences: r.getOwnerReference(job),
 			Labels: r.getLabels(complianceScan),
 		},
 		Data: map[string]string{
@@ -111,11 +111,22 @@ func (r *Reconciler) deployDikiConfigMap(ctx context.Context, complianceScan *v1
 func (r *Reconciler) deployExporterConfigSecret(ctx context.Context, complianceScan *v1alpha1.ComplianceScan, reportOutputs []v1alpha1.ReportOutput) (*corev1.Secret, error) {
 	outputs := []exporterv1alpha1.Output{}
 	for _, reportOutput := range reportOutputs {
-		outputs = append(outputs, exporterv1alpha1.Output{
-			Name:   reportOutput.Name,
-			Type:   exporterv1alpha1.ExporterTypeConfigMap,
-			Config: utils.ToRawExtension(reportOutput.Spec.Output.ConfigMap),
-		})
+		if reportOutput.Spec.Output.Postgres != nil {
+			outputs = append(outputs, exporterv1alpha1.Output{
+				Name:   reportOutput.Name,
+				Type:   exporterv1alpha1.ExporterTypePostgres,
+				Config: utils.ToRawExtension(reportOutput.Spec.Output.Postgres),
+			})
+			continue
+		}
+
+		if reportOutput.Spec.Output.ConfigMap != nil {
+			outputs = append(outputs, exporterv1alpha1.Output{
+				Name:   reportOutput.Name,
+				Type:   exporterv1alpha1.ExporterTypeConfigMap,
+				Config: utils.ToRawExtension(reportOutput.Spec.Output.ConfigMap),
+			})
+		}
 	}
 
 	exporterConfig := &exporterv1alpha1.DikiExporterConfiguration{
@@ -148,7 +159,7 @@ func (r *Reconciler) deployExporterConfigSecret(ctx context.Context, complianceS
 		ObjectMeta: metav1.ObjectMeta{
 			GenerateName: ExporterConfigSecretGenerateNamePrefix,
 			Namespace:    r.Config.DikiRunner.Namespace,
-			//OwnerReferences: r.getOwnerReference(job),
+			// OwnerReferences: r.getOwnerReference(job),
 			Labels: r.getLabels(complianceScan),
 		},
 		Data: map[string][]byte{
