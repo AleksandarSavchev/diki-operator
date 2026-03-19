@@ -30,9 +30,3 @@ rules:
   - create
   - update
   - patch
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - create

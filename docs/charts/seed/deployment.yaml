@@ -35,7 +35,7 @@ spec:
         fsGroup: 65532
       containers:
       - name: diki-operator
-        image: docker.io/aleksandarsavchev688/diki-operator:amd4
+        image: docker.io/aleksandarsavchev688/diki-operator:amd7
         imagePullPolicy: IfNotPresent
         args:
         - --kubeconfig=/var/run/secrets/gardener.cloud/shoot/generic-kubeconfig/kubeconfig

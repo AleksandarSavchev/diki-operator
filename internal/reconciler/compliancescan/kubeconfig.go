@@ -11,51 +11,55 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
 	"github.com/gardener/diki-operator/pkg/apis/diki/v1alpha1"
 )
 
+const dikiRunnerContextName = "diki-runner"
+
 // generateKubeconfig creates a kubeconfig from the TargetRESTConfig
 func (r *Reconciler) generateKubeconfig() ([]byte, error) {
-	// When the REST config was loaded from a kubeconfig with a tokenFile reference
-	// (e.g. Gardener's generic token kubeconfig), BearerToken is empty and the token
-	// lives in BearerTokenFile. Read it so we can embed it inline in the generated kubeconfig.
-	token := r.TargetRESTConfig.BearerToken
-	if token == "" && r.TargetRESTConfig.BearerTokenFile != "" {
-		tokenBytes, err := os.ReadFile(r.TargetRESTConfig.BearerTokenFile)
-		if err != nil {
-			return nil, fmt.Errorf("failed to read bearer token file %q: %w", r.TargetRESTConfig.BearerTokenFile, err)
-		}
-		token = string(tokenBytes)
+	// TODO: Fix this to work in every scenario.
+	tokenBytes, err := os.ReadFile("/var/run/secrets/gardener.cloud/shoot/generic-kubeconfig-runner/token")
+	if err != nil {
+		return nil, fmt.Errorf("failed to read bearer token file %q: %w", r.TargetRESTConfig.BearerTokenFile, err)
+	}
+	token := string(tokenBytes)
+
+	authInfo := &clientcmdapi.AuthInfo{
+		ClientCertificateData: r.TargetRESTConfig.CertData,
+		ClientKeyData:         r.TargetRESTConfig.KeyData,
+		Token:                 token,
 	}
 
-	config := clientcmdapi.Config{
-		Clusters: map[string]*clientcmdapi.Cluster{
-			"target-cluster": {
-				Server:                   r.TargetRESTConfig.Host,
-				CertificateAuthorityData: r.TargetRESTConfig.CAData,
-				InsecureSkipTLSVerify:    r.TargetRESTConfig.Insecure,
-			},
-		},
-		AuthInfos: map[string]*clientcmdapi.AuthInfo{
-			"target-user": {
-				ClientCertificateData: r.TargetRESTConfig.CertData,
-				ClientKeyData:         r.TargetRESTConfig.KeyData,
-				Token:                 token,
-			},
-		},
-		Contexts: map[string]*clientcmdapi.Context{
-			"target-context": {
-				Cluster:  "target-cluster",
-				AuthInfo: "target-user",
-			},
-		},
-		CurrentContext: "target-context",
+	return kubeconfigWithAuthInfo(r.TargetRESTConfig, authInfo)
+}
+
+// kubeconfigWithAuthInfo creates a serialized kubeconfig from a REST config and auth info.
+func kubeconfigWithAuthInfo(config *rest.Config, authInfo *clientcmdapi.AuthInfo) ([]byte, error) {
+	// Prefer CA file reference; fall back to inline CA data.
+	caFile, caData := config.CAFile, []byte{}
+	if len(caFile) == 0 {
+		caData = config.CAData
 	}
 
-	return clientcmd.Write(config)
+	return clientcmd.Write(clientcmdapi.Config{
+		Clusters: map[string]*clientcmdapi.Cluster{dikiRunnerContextName: {
+			Server:                   config.Host,
+			InsecureSkipTLSVerify:    config.Insecure,
+			CertificateAuthority:     caFile,
+			CertificateAuthorityData: caData,
+		}},
+		AuthInfos: map[string]*clientcmdapi.AuthInfo{dikiRunnerContextName: authInfo},
+		Contexts: map[string]*clientcmdapi.Context{dikiRunnerContextName: {
+			Cluster:  dikiRunnerContextName,
+			AuthInfo: dikiRunnerContextName,
+		}},
+		CurrentContext: dikiRunnerContextName,
+	})
 }
 
 // deployKubeconfigSecret creates a Secret containing the kubeconfig for the target cluster
