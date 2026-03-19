@@ -19,6 +19,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
 	componentbaseconfigv1alpha1 "k8s.io/component-base/config/v1alpha1"
 	"k8s.io/component-base/version"
 	"k8s.io/component-base/version/verflag"
@@ -27,6 +29,7 @@ import (
 	"k8s.io/utils/ptr"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/cache"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	controllerconfig "sigs.k8s.io/controller-runtime/pkg/config"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -85,6 +88,7 @@ func NewCommand() *cobra.Command {
 }
 
 func run(ctx context.Context, log logr.Logger, cfg *configv1alpha1.DikiOperatorConfiguration) error {
+	// Get the target cluster config (scanned cluster)
 	conf, err := ctrl.GetConfig()
 	if err != nil {
 		return err
@@ -103,7 +107,7 @@ func run(ctx context.Context, log logr.Logger, cfg *configv1alpha1.DikiOperatorC
 		},
 		Cache: cache.Options{
 			DefaultNamespaces: map[string]cache.Config{
-				"kube-system": cache.Config{},
+				"kube-system": {},
 			},
 		},
 		GracefulShutdownTimeout: ptr.To(5 * time.Second),
@@ -148,9 +152,58 @@ func run(ctx context.Context, log logr.Logger, cfg *configv1alpha1.DikiOperatorC
 		return err
 	}
 
+	// Create runner client for the cluster where diki-runner pods will be deployed.
+	// Use in-cluster config if available, otherwise use the manager kubeconfig.
+	var runnerClient client.Client
+	var runnerRESTConfig *rest.Config
+
+	inClusterConf, err := rest.InClusterConfig()
+	if err != nil {
+		log.Info("Not running in-cluster, using manager kubeconfig for runner client")
+		runnerClient = mgr.GetClient()
+		runnerRESTConfig = mgr.GetConfig()
+	} else {
+		log.Info("Running in-cluster, using in-cluster config for runner client")
+		util.ApplyClientConnectionConfigurationToRESTConfig(&componentbaseconfigv1alpha1.ClientConnectionConfiguration{
+			QPS:   100.0,
+			Burst: 130,
+		}, inClusterConf)
+
+		runnerClient, err = client.New(inClusterConf, client.Options{
+			Scheme: mgr.GetScheme(),
+		})
+		if err != nil {
+			return fmt.Errorf("unable to create runner client: %w", err)
+		}
+		runnerRESTConfig = inClusterConf
+	}
+
+	// Determine the target REST config for the cluster to be scanned.
+	// If DikiRunner.Kubeconfig is configured, load the target config from that file.
+	// Otherwise, use the manager's kubeconfig as the target.
+	var targetRESTConfig *rest.Config
+	if cfg.Controllers.ComplianceScan.DikiRunner.Kubeconfig != nil && *cfg.Controllers.ComplianceScan.DikiRunner.Kubeconfig != "" {
+		log.Info("Loading target cluster kubeconfig for diki-runner", "path", *cfg.Controllers.ComplianceScan.DikiRunner.Kubeconfig)
+		targetRESTConfig, err = clientcmd.BuildConfigFromFlags("", *cfg.Controllers.ComplianceScan.DikiRunner.Kubeconfig)
+		if err != nil {
+			return fmt.Errorf("failed to load diki-runner target kubeconfig: %w", err)
+		}
+		util.ApplyClientConnectionConfigurationToRESTConfig(&componentbaseconfigv1alpha1.ClientConnectionConfiguration{
+			QPS:   100.0,
+			Burst: 130,
+		}, targetRESTConfig)
+	} else {
+		log.Info("DikiRunner kubeconfig not configured, using manager kubeconfig as target")
+		targetRESTConfig = mgr.GetConfig()
+	}
+
 	// Setup ComplianceScan controller
 	if err := (&compliancescan.Reconciler{
-		Config: cfg.Controllers.ComplianceScan,
+		TargetClient:     mgr.GetClient(),  // Manager cluster (where ComplianceScan CRDs live)
+		TargetRESTConfig: targetRESTConfig, // Target cluster config (cluster to be scanned by diki-runner)
+		Client:           runnerClient,     // Runner cluster (where diki-runner pods are deployed)
+		RESTConfig:       runnerRESTConfig, // Runner cluster config
+		Config:           cfg.Controllers.ComplianceScan,
 	}).SetupWithManager(mgr); err != nil {
 		return fmt.Errorf("unable to create complianceScan reconcile controller: %w", err)
 	}

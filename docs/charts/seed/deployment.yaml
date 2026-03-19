@@ -1,0 +1,114 @@
+# SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diki-operator
+  namespace: shoot--i550469--diki-hackathon
+  labels:
+    app.kubernetes.io/name: diki-operator
+spec:
+  revisionHistoryLimit: 2
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: diki-operator
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: diki-operator
+        networking.gardener.cloud/to-blocked-cidrs: allowed
+        networking.gardener.cloud/to-dns: allowed
+        networking.gardener.cloud/to-private-networks: allowed
+        networking.gardener.cloud/to-public-networks: allowed
+        networking.resources.gardener.cloud/to-kube-apiserver-tcp-443: allowed
+    spec:
+      serviceAccountName: diki-operator
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+      containers:
+      - name: diki-operator
+        image: docker.io/aleksandarsavchev688/diki-operator:amd4
+        imagePullPolicy: IfNotPresent
+        args:
+        - --kubeconfig=/var/run/secrets/gardener.cloud/shoot/generic-kubeconfig/kubeconfig
+        - --config=/etc/diki-operator/config/config.yaml
+        ports:
+        - name: health
+          containerPort: 8081
+          protocol: TCP
+        - name: metrics
+          containerPort: 8080
+          protocol: TCP
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - name: diki-operator-config
+          mountPath: /etc/diki-operator/config
+          readOnly: true
+        - mountPath: /var/run/secrets/gardener.cloud/shoot/generic-kubeconfig
+          name: kubeconfig
+          readOnly: true
+        - mountPath: /var/run/secrets/gardener.cloud/shoot/generic-kubeconfig-runner
+          name: kubeconfig-runner
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 5
+      volumes:
+      - name: diki-operator-config
+        configMap:
+          defaultMode: 0440
+          name: diki-operator
+      - name: kubeconfig
+        projected:
+          defaultMode: 0440
+          sources:
+          - secret:
+              items:
+              - key: kubeconfig
+                path: kubeconfig
+              name: generic-token-kubeconfig-09559516
+              optional: false
+          - secret:
+              items:
+              - key: token
+                path: token
+              name: shoot-access-diki-operator
+              optional: false
+      - name: kubeconfig-runner
+        projected:
+          defaultMode: 0440
+          sources:
+          - secret:
+              items:
+              - key: kubeconfig
+                path: kubeconfig
+              name: generic-token-kubeconfig-09559516
+              optional: false
+          - secret:
+              items:
+              - key: token
+                path: token
+              name: shoot-access-diki-runner
+              optional: false

@@ -25,9 +25,11 @@ import (
 
 // Reconciler reconciles compliance scans.
 type Reconciler struct {
-	Client     client.Client
-	RESTConfig *rest.Config
-	Config     configv1alpha1.ComplianceScanConfig
+	TargetClient     client.Client
+	TargetRESTConfig *rest.Config
+	Client           client.Client
+	RESTConfig       *rest.Config
+	Config           configv1alpha1.ComplianceScanConfig
 }
 
 // Reconcile handles reconciliation requests for ComplianceScan resources.
@@ -36,7 +38,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 
 	complianceScan := &v1alpha1.ComplianceScan{}
 
-	if err := r.Client.Get(ctx, client.ObjectKey{Name: req.Name}, complianceScan); err != nil {
+	if err := r.TargetClient.Get(ctx, client.ObjectKey{Name: req.Name}, complianceScan); err != nil {
 		if apierrors.IsNotFound(err) {
 			log.Info("Object is gone, stop reconciling")
 			return reconcile.Result{}, nil
@@ -60,7 +62,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 		time.Now(),
 	)
 	complianceScan.Status.Phase = v1alpha1.ComplianceScanRunning
-	if err := r.Client.Status().Patch(ctx, complianceScan, patch); err != nil {
+	if err := r.TargetClient.Status().Patch(ctx, complianceScan, patch); err != nil {
 		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
 	}
 
@@ -75,13 +77,27 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 				Name: output.Name,
 			},
 		}
-		if err := r.Client.Get(ctx, client.ObjectKeyFromObject(reportOutputObj), reportOutputObj); err != nil {
+		if err := r.TargetClient.Get(ctx, client.ObjectKeyFromObject(reportOutputObj), reportOutputObj); err != nil {
 			return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
 		}
 		reportOutputs = append(reportOutputs, *reportOutputObj)
 	}
 
-	dikiConfigMap, err := r.deployDikiConfigMap(ctx, complianceScan)
+	// Create kubeconfig secret if target cluster is different from operator cluster
+	var kubeconfigSecretName string
+	if r.needsKubeconfig() {
+		log.Info("Target cluster differs from operator cluster, creating kubeconfig secret")
+		kubeconfigSecret, err := r.deployKubeconfigSecret(ctx, complianceScan)
+		if err != nil {
+			return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
+		}
+		kubeconfigSecretName = kubeconfigSecret.Name
+		log.Info(fmt.Sprintf("Created kubeconfig Secret %s", client.ObjectKeyFromObject(kubeconfigSecret)))
+	} else {
+		log.Info("Target cluster is the same as operator cluster, using in-cluster config")
+	}
+
+	dikiConfigMap, err := r.deployDikiConfigMap(ctx, complianceScan, len(kubeconfigSecretName) > 0)
 	if err != nil {
 		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
 	}
@@ -105,7 +121,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 	}
 
 	// TODO(AleksandarSavchev): Create diki-runner job here.
-	dikiRunner, err := r.deployDikiRunner(ctx, dikiImage.String(), dikiExporterImage.String(), dikiConfigMap.Name, exporterConfigSecret.Name, complianceScan)
+	dikiRunner, err := r.deployDikiRunner(ctx, dikiImage.String(), dikiExporterImage.String(), dikiConfigMap.Name, exporterConfigSecret.Name, kubeconfigSecretName, complianceScan)
 	if err != nil {
 		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
 	}
@@ -128,7 +144,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 		"ComplianceScan has completed successfully",
 		time.Now(),
 	)
-	if err := r.Client.Status().Patch(ctx, complianceScan, patch); err != nil {
+	if err := r.TargetClient.Status().Patch(ctx, complianceScan, patch); err != nil {
 		return reconcile.Result{}, r.handleFailedScan(ctx, complianceScan, log, err)
 	}
 

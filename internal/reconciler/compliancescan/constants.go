@@ -22,8 +22,12 @@ const (
 	ConfigMapGenerateNamePrefix = "diki-config-"
 	// ExporterConfigSecretGenerateNamePrefix is the prefix for diki config ConfigMap names.
 	ExporterConfigSecretGenerateNamePrefix = "exporter-config-"
+	// KubeconfigSecretGenerateNamePrefix is the prefix for kubeconfig Secret names.
+	KubeconfigSecretGenerateNamePrefix = "target-kubeconfig-"
 	// DikiConfigKey is the key used to store the YAML configuration in the ConfigMap data.
 	DikiConfigKey = "config.yaml"
+	// KubeconfigKey is the key used to store the kubeconfig in the Secret data.
+	KubeconfigKey = "kubeconfig"
 	// DikiExporterConfigKey is the key used to store the YAML configuration in the Secret data.
 	ExporterSecretKey = "exporter-config.yaml"
 	// RuleOptionsSuffix is the suffix appended to ruleset IDs when looking up rule options in ConfigMaps.

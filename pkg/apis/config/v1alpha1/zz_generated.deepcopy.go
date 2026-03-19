@@ -102,6 +102,11 @@ func (in *DikiRunnerConfig) DeepCopyInto(out *DikiRunnerConfig) {
 		*out = new(v1.Duration)
 		**out = **in
 	}
+	if in.Kubeconfig != nil {
+		in, out := &in.Kubeconfig, &out.Kubeconfig
+		*out = new(string)
+		**out = **in
+	}
 	return
 }
 

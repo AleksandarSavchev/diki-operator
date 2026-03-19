@@ -30,6 +30,14 @@ const (
 
 // SetupWithManager specifies how the controller is built to watch ComplianceScan resources.
 func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
+	if r.TargetClient == nil {
+		r.TargetClient = mgr.GetClient()
+	}
+
+	if r.TargetRESTConfig == nil {
+		r.TargetRESTConfig = mgr.GetConfig()
+	}
+
 	if r.Client == nil {
 		r.Client = mgr.GetClient()
 	}

@@ -75,6 +75,11 @@ type DikiRunnerConfig struct {
 	// PodCompletionTimeout is the maximum duration to wait for a DikiRunner pod to complete.
 	// +optional
 	PodCompletionTimeout *metav1.Duration `json:"podCompletionTimeout,omitempty"`
+	// Kubeconfig is the path to the kubeconfig file for the target cluster that the DikiRunner will scan.
+	// This allows using a different service account for the DikiRunner than the one used by the operator.
+	// If not specified, the manager's kubeconfig will be used.
+	// +optional
+	Kubeconfig *string `json:"kubeconfig,omitempty"`
 }
 
 // ServerConfiguration contains details for the HTTP(S) servers.
