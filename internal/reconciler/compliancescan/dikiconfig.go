@@ -25,15 +25,12 @@ import (
 )
 
 func (r *Reconciler) deployDikiConfigMap(ctx context.Context, complianceScan *v1alpha1.ComplianceScan, setKubeconfigPath bool) (*corev1.ConfigMap, error) {
-	providerArgs := make(map[string]any)
-	if setKubeconfigPath {
-		providerArgs["kubeconfigPath"] = "/kubeconfig/" + KubeconfigKey
-	}
-
 	managedk8sProvider := dikiconfig.ProviderConfig{
 		ID:   managedk8s.ProviderID,
 		Name: managedk8s.ProviderName,
-		Args: providerArgs,
+	}
+	if setKubeconfigPath {
+		managedk8sProvider.Args = map[string]any{"kubeconfigPath": "/kubeconfig/" + KubeconfigKey}
 	}
 
 	for _, ruleset := range complianceScan.Spec.Rulesets {

@@ -50,13 +50,29 @@ var _ = Describe("Controller", func() {
 		Expect(kubernetes.AddGardenSchemeToScheme(scheme)).To(Succeed())
 		Expect(dikiinstall.AddToScheme(scheme)).To(Succeed())
 
-		fakeClient = fake.NewClientBuilder().WithScheme(scheme).WithStatusSubresource(&dikiv1alpha1.ComplianceScan{}).Build()
+		fakeClient = fake.NewClientBuilder().
+			WithScheme(scheme).
+			WithStatusSubresource(&dikiv1alpha1.ComplianceScan{}).
+			WithInterceptorFuncs(interceptor.Funcs{
+				Get: func(ctx context.Context, c client.WithWatch, key client.ObjectKey, obj client.Object, opts ...client.GetOption) error {
+					if err := c.Get(ctx, key, obj, opts...); err != nil {
+						return err
+					}
+					if pod, ok := obj.(*corev1.Pod); ok {
+						pod.Status.Phase = corev1.PodSucceeded
+					}
+					return nil
+				},
+			}).
+			Build()
 		fakeConfig = &rest.Config{
 			Host: "foo",
 		}
 		cr = &compliancescan.Reconciler{
-			Client:     fakeClient,
-			RESTConfig: fakeConfig,
+			Client:           fakeClient,
+			RESTConfig:       fakeConfig,
+			TargetClient:     fakeClient,
+			TargetRESTConfig: fakeConfig,
 			Config: configv1alpha1.ComplianceScanConfig{
 				SyncPeriod: &metav1.Duration{Duration: time.Hour},
 				DikiRunner: configv1alpha1.DikiRunnerConfig{
@@ -107,11 +123,20 @@ var _ = Describe("Controller", func() {
 	It("should handle failed compliance scan reconcile", func() {
 		Expect(fakeClient.Create(ctx, complianceScan)).To(Succeed())
 
-		cr.Client = fake.NewClientBuilder().
+		interceptedTargetClient := fake.NewClientBuilder().
 			WithScheme(fakeClient.Scheme()).
 			WithStatusSubresource(&dikiv1alpha1.ComplianceScan{}).
 			WithObjects(complianceScan).
 			WithInterceptorFuncs(interceptor.Funcs{
+				Get: func(ctx context.Context, c client.WithWatch, key client.ObjectKey, obj client.Object, opts ...client.GetOption) error {
+					if err := c.Get(ctx, key, obj, opts...); err != nil {
+						return err
+					}
+					if pod, ok := obj.(*corev1.Pod); ok {
+						pod.Status.Phase = corev1.PodSucceeded
+					}
+					return nil
+				},
 				SubResourcePatch: func(ctx context.Context, client client.Client, subResourceName string, obj client.Object, patch client.Patch, opts ...client.SubResourcePatchOption) error {
 					var (
 						cr        = obj.(*dikiv1alpha1.ComplianceScan)
@@ -125,12 +150,13 @@ var _ = Describe("Controller", func() {
 					return client.SubResource(subResourceName).Patch(ctx, obj, patch, opts...)
 				},
 			}).Build()
+		cr.TargetClient = interceptedTargetClient
 
 		res, err := cr.Reconcile(ctx, request)
 		Expect(err).NotTo(HaveOccurred())
 		Expect(res).To(Equal(reconcile.Result{}))
 
-		Expect(cr.Client.Get(ctx, client.ObjectKey{Name: complianceScan.Name}, complianceScan)).To(Succeed())
+		Expect(cr.TargetClient.Get(ctx, client.ObjectKey{Name: complianceScan.Name}, complianceScan)).To(Succeed())
 		Expect(complianceScan.Status.Phase).To(Equal(dikiv1alpha1.ComplianceScanFailed))
 		Expect(complianceScan.Status.Conditions).To(ConsistOf(
 			MatchFields(IgnoreExtras, Fields{
