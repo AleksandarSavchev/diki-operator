@@ -33,7 +33,7 @@ func (r *Reconciler) handleFailedScan(ctx context.Context, complianceScan *v1alp
 		return c.Type == v1alpha1.ConditionTypeCompleted
 	})
 
-	if err2 := r.Client.Status().Patch(ctx, complianceScan, patch); err2 != nil {
+	if err2 := r.TargetClient.Status().Patch(ctx, complianceScan, patch); err2 != nil {
 		return fmt.Errorf("failed to update ComplianceScan status to Failed: %w, original error: %w", err2, err)
 	}
 

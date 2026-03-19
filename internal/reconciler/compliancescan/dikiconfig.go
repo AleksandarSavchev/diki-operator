@@ -24,10 +24,13 @@ import (
 	exporterv1alpha1 "github.com/gardener/diki-operator/pkg/apis/dikiexporter/v1alpha1"
 )
 
-func (r *Reconciler) deployDikiConfigMap(ctx context.Context, complianceScan *v1alpha1.ComplianceScan) (*corev1.ConfigMap, error) {
+func (r *Reconciler) deployDikiConfigMap(ctx context.Context, complianceScan *v1alpha1.ComplianceScan, setKubeconfigPath bool) (*corev1.ConfigMap, error) {
 	managedk8sProvider := dikiconfig.ProviderConfig{
 		ID:   managedk8s.ProviderID,
 		Name: managedk8s.ProviderName,
+	}
+	if setKubeconfigPath {
+		managedk8sProvider.Args = map[string]any{"kubeconfigPath": "/kubeconfig/" + KubeconfigKey}
 	}
 
 	for _, ruleset := range complianceScan.Spec.Rulesets {
@@ -208,7 +211,7 @@ func (r *Reconciler) getConfigMapKeyValue(ctx context.Context, configMapRef v1al
 		},
 	}
 
-	if err := r.Client.Get(ctx, client.ObjectKeyFromObject(configMap), configMap); err != nil {
+	if err := r.TargetClient.Get(ctx, client.ObjectKeyFromObject(configMap), configMap); err != nil {
 		return "", fmt.Errorf("failed to get configMap %s: %w", client.ObjectKeyFromObject(configMap), err)
 	}
 

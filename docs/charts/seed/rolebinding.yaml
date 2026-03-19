@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: diki-operator
+  namespace: shoot--i550469--diki-hackathon
+  labels:
+    app.kubernetes.io/name: diki-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: diki-operator
+subjects:
+- kind: ServiceAccount
+  name: diki-operator
+  namespace: shoot--i550469--diki-hackathon

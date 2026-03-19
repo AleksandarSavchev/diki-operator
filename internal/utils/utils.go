@@ -7,6 +7,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
+// ToRawExtension marshals v to a runtime.RawExtension.
 func ToRawExtension(v any) runtime.RawExtension {
 	if v == nil {
 		return runtime.RawExtension{}

@@ -10,5 +10,5 @@ images:
   tag: "v0.24.0"
 - name: diki-exporter
   sourceRepository: github.com/gardener/diki-operator
-  repository: local-skaffold/diki-exporter
-  tag: "latest"
+  repository: docker.io/aleksandarsavchev688/diki-exporter
+  tag: "amd1"

@@ -16,7 +16,7 @@ import (
 	"github.com/gardener/diki-operator/pkg/apis/diki/v1alpha1"
 )
 
-func (r *Reconciler) deployDikiRunner(ctx context.Context, dikiImage, dikiExporterImage, dikiConfigMapName, dikiExporterConfigSecretName string, complianceScan *v1alpha1.ComplianceScan) (*corev1.Pod, error) {
+func (r *Reconciler) deployDikiRunner(ctx context.Context, dikiImage, dikiExporterImage, dikiConfigMapName, dikiExporterConfigSecretName, kubeconfigSecretName string, complianceScan *v1alpha1.ComplianceScan) (*corev1.Pod, error) {
 	pod := &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			GenerateName: "diki-runner-",
@@ -116,6 +116,34 @@ func (r *Reconciler) deployDikiRunner(ctx context.Context, dikiImage, dikiExport
 				},
 			},
 		},
+	}
+
+	if len(kubeconfigSecretName) > 0 {
+		pod.Spec.Volumes = append(pod.Spec.Volumes, corev1.Volume{
+			Name: "target-kubeconfig",
+			VolumeSource: corev1.VolumeSource{
+				Secret: &corev1.SecretVolumeSource{
+					SecretName: kubeconfigSecretName,
+				},
+			},
+		})
+
+		pod.Spec.InitContainers[0].VolumeMounts = append(pod.Spec.InitContainers[0].VolumeMounts, corev1.VolumeMount{
+			Name:      "target-kubeconfig",
+			MountPath: "/kubeconfig",
+			ReadOnly:  true,
+		})
+
+		// Mount the target kubeconfig on the diki-exporter container as well,
+		// so it can reach the target cluster where the ComplianceScan CRDs exist.
+		pod.Spec.Containers[0].VolumeMounts = append(pod.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
+			Name:      "target-kubeconfig",
+			MountPath: "/kubeconfig",
+			ReadOnly:  true,
+		})
+		pod.Spec.Containers[0].Args = append(pod.Spec.Containers[0].Args,
+			"--kubeconfig", "/kubeconfig/"+KubeconfigKey,
+		)
 	}
 
 	if err := r.Client.Create(ctx, pod); err != nil {
