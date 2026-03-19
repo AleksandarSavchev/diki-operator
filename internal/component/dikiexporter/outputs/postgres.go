@@ -16,20 +16,24 @@ import (
 	"github.com/gardener/diki-operator/pkg/apis/dikiexporter/v1alpha1"
 )
 
+// PostgresExporter exports diki reports to a PostgreSQL database.
 type PostgresExporter struct {
 	Config dikiv1alpha1.PostgresOutput
 }
 
+// NewPostgresExporter creates a new PostgresExporter with the given configuration.
 func NewPostgresExporter(config dikiv1alpha1.PostgresOutput) *PostgresExporter {
 	return &PostgresExporter{
 		Config: config,
 	}
 }
 
+// Type returns the output type for this exporter.
 func (p *PostgresExporter) Type() v1alpha1.OutputType {
 	return v1alpha1.ExporterTypePostgres
 }
 
+// Export inserts the given report into the configured PostgreSQL table.
 func (p *PostgresExporter) Export(ctx context.Context, report dikireport.Report) (any, error) {
 	conn, err := pgx.Connect(ctx, p.Config.ConnectionString)
 	if err != nil {

@@ -48,6 +48,7 @@ type Output struct {
 	Postgres *PostgresOutput `json:"postgres,omitempty"`
 }
 
+// PostgresOutput contains the configuration for exporting the report to a Postgres database.
 type PostgresOutput struct {
 	// ConnectionString is the connection string for the Postgres database.
 	ConnectionString string `json:"connectionString"`

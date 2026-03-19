@@ -47,7 +47,7 @@ func mockPostgresServer(script func(backend *pgproto3.Backend) error) (connStr s
 
 	host, port, _ := net.SplitHostPort(ln.Addr().String())
 	connStr = fmt.Sprintf("host=%s port=%s sslmode=disable user=test dbname=test", host, port)
-	cleanup = func() { ln.Close() } //nolint:errcheck
+	cleanup = func() { ln.Close() } //nolint:errcheck,gosec
 	serverErr = errCh
 	return
 }
@@ -128,8 +128,8 @@ func handleClose(backend *pgproto3.Backend) error {
 	for {
 		msg, err := backend.Receive()
 		if err != nil {
-			// EOF or connection reset means the client closed – that is fine.
-			return nil
+			// EOF or connection reset means the client closed cleanly.
+			return nil //nolint:nilerr
 		}
 		if _, ok := msg.(*pgproto3.Terminate); ok {
 			return nil
