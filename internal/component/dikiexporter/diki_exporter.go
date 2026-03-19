@@ -124,6 +124,13 @@ func (d *DikiExporter) createOutputs() (map[string]dikioutputs.Output, error) {
 			}
 
 			outputs[output.Name] = dikioutputs.NewConfigMapExporter(d.Client, configMapOutput)
+		case v1alpha1.ExporterTypePostgres:
+			var postgresOutput dikiv1alpha1.PostgresOutput
+			if err := json.Unmarshal(output.Config.Raw, &postgresOutput); err != nil {
+				return nil, fmt.Errorf("failed to unmarshal PostgresOutput: %w", err)
+			}
+
+			outputs[output.Name] = dikioutputs.NewPostgresExporter(postgresOutput)
 		default:
 			fmt.Printf("Unsupported output type: %s\n", output.Type)
 		}
