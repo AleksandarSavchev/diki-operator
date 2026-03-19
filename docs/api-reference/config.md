@@ -511,6 +511,20 @@ ConfigMapOutput
 <p>ConfigMap contains the configuration for exporting the report to a ConfigMap.</p>
 </td>
 </tr>
+<tr>
+<td>
+<code>postgres</code></br>
+<em>
+<a href="#diki.gardener.cloud/v1alpha1.PostgresOutput">
+PostgresOutput
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Postgres contains the configuration for exporting the report to a Postgres database.</p>
+</td>
+</tr>
 </tbody>
 </table>
 <h3 id="diki.gardener.cloud/v1alpha1.OutputStatus">OutputStatus
@@ -581,6 +595,47 @@ k8s.io/apimachinery/pkg/runtime.RawExtension
 <p>
 <p>OutputStatusPhase is an alias for string representing the phase of an output after processing by the exporter.</p>
 </p>
+<h3 id="diki.gardener.cloud/v1alpha1.PostgresOutput">PostgresOutput
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#diki.gardener.cloud/v1alpha1.Output">Output</a>)
+</p>
+<p>
+<p>PostgresOutput contains the configuration for exporting the report to a Postgres database.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>connectionString</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>ConnectionString is the connection string for the Postgres database.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>tableName</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>TableName is the name of the table where the report will be stored.</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="diki.gardener.cloud/v1alpha1.ReportOutput">ReportOutput
 </h3>
 <p>

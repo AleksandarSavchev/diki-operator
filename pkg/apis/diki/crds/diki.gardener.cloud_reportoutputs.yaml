@@ -66,6 +66,22 @@ spec:
                           Defaults to `kube-system`.
                         type: string
                     type: object
+                  postgres:
+                    description: Postgres contains the configuration for exporting
+                      the report to a Postgres database.
+                    properties:
+                      connectionString:
+                        description: ConnectionString is the connection string for
+                          the Postgres database.
+                        type: string
+                      tableName:
+                        description: TableName is the name of the table where the
+                          report will be stored.
+                        type: string
+                    required:
+                    - connectionString
+                    - tableName
+                    type: object
                 type: object
             required:
             - output
