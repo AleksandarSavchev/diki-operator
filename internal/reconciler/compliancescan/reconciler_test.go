@@ -52,14 +52,15 @@ var _ = Describe("Controller", func() {
 
 		fakeClient = fake.NewClientBuilder().
 			WithScheme(scheme).
-			WithStatusSubresource(&dikiv1alpha1.ComplianceScan{}).
+			WithStatusSubresource(&dikiv1alpha1.ComplianceScan{}, &corev1.Pod{}).
 			WithInterceptorFuncs(interceptor.Funcs{
-				Get: func(ctx context.Context, c client.WithWatch, key client.ObjectKey, obj client.Object, opts ...client.GetOption) error {
-					if err := c.Get(ctx, key, obj, opts...); err != nil {
+				Create: func(ctx context.Context, c client.WithWatch, obj client.Object, opts ...client.CreateOption) error {
+					if err := c.Create(ctx, obj, opts...); err != nil {
 						return err
 					}
 					if pod, ok := obj.(*corev1.Pod); ok {
 						pod.Status.Phase = corev1.PodSucceeded
+						return c.Status().Update(ctx, pod)
 					}
 					return nil
 				},

@@ -1,0 +1,9 @@
+apiVersion: diki.gardener.cloud/v1alpha1
+kind: ReportOutput
+metadata:
+  name: example-postgres-output
+spec:
+  output:
+    postgres:
+      connectionString: "postgresql://user:password@cluster-example-rw.default:5432/app"
+      tableName: "diki_report"

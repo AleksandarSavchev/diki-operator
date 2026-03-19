@@ -27,3 +27,4 @@ spec:
             key: security-hardened-k8s-rules # defaults to "<rulesetID>-rules"
   outputs:
     - name: example-configmap-output
+    - name: example-postgres-output
