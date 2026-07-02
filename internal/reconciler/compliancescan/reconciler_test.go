@@ -320,9 +320,11 @@ var _ = Describe("Controller", func() {
 				))
 			})
 
-			It("should create a Job with kubeconfig projected volume when kubeconfigSecretRef is set", func() {
-				cr.Config.DikiRunner.KubeconfigSecretRef = &configv1alpha1.SecretRef{
-					Name: "target-kubeconfig",
+			It("should create a Job with kubeconfig projected volume when kubeconfig is set", func() {
+				cr.Config.DikiRunner.Kubeconfig = &configv1alpha1.KubeconfigConfig{
+					SecretRef: configv1alpha1.SecretRef{
+						Name: "target-kubeconfig",
+					},
 				}
 
 				res, err := cr.Reconcile(ctx, request)
@@ -361,11 +363,13 @@ var _ = Describe("Controller", func() {
 			})
 
 			It("should create a Job with projected volume containing both kubeconfig and token when both refs are set", func() {
-				cr.Config.DikiRunner.KubeconfigSecretRef = &configv1alpha1.SecretRef{
-					Name: "target-kubeconfig",
-				}
-				cr.Config.DikiRunner.TokenSecretRef = &configv1alpha1.SecretRef{
-					Name: "target-token",
+				cr.Config.DikiRunner.Kubeconfig = &configv1alpha1.KubeconfigConfig{
+					SecretRef: configv1alpha1.SecretRef{
+						Name: "target-kubeconfig",
+					},
+					TokenSecretRef: &configv1alpha1.SecretRef{
+						Name: "target-token",
+					},
 				}
 
 				res, err := cr.Reconcile(ctx, request)
@@ -710,9 +714,11 @@ var _ = Describe("Controller", func() {
 			Expect(configMap.Data["config.yaml"]).To(Equal(configFor()))
 		})
 
-		It("should create a diki config ConfigMap with kubeconfigPath when kubeconfigSecretRef is set", func() {
-			cr.Config.DikiRunner.KubeconfigSecretRef = &configv1alpha1.SecretRef{
-				Name: "target-kubeconfig",
+		It("should create a diki config ConfigMap with kubeconfigPath when kubeconfig is set", func() {
+			cr.Config.DikiRunner.Kubeconfig = &configv1alpha1.KubeconfigConfig{
+				SecretRef: configv1alpha1.SecretRef{
+					Name: "target-kubeconfig",
+				},
 			}
 			Expect(fakeClient.Create(ctx, complianceScan)).To(Succeed())
 
