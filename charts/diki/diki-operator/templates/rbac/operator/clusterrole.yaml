@@ -30,6 +30,14 @@ rules:
   - update
   - patch
 - apiGroups:
+  - diki.gardener.cloud
+  resources:
+  - reportoutputs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - ""
   resources:
   - configmaps
@@ -37,10 +45,3 @@ rules:
   - get
   - list
   - watch
-- apiGroups:
-  - diki.gardener.cloud
-  resources:
-  - reportoutputs
-  verbs:
-  - get
-  - list
