@@ -15,6 +15,8 @@ GOARCH                 ?= $(shell go env GOARCH)
 EFFECTIVE_VERSION      := $(VERSION)-$(shell git rev-parse HEAD)
 LD_FLAGS               := "-w $(shell bash $(GARDENER_HACK_DIR)/get-build-ld-flags.sh k8s.io/component-base $(REPO_ROOT)/VERSION $(NAME))"
 KIND_LOCAL_KUBECONFIG  := $(REPO_ROOT)/dev/local/kind/kubeconfig
+REMOTE_SOURCE_KUBECONFIG := $(REPO_ROOT)/dev/local/remote-kind/source-kubeconfig
+REMOTE_TARGET_KUBECONFIG := $(REPO_ROOT)/dev/local/remote-kind/target-kubeconfig
 
 ifneq ($(strip $(shell git status --porcelain 2>/dev/null)),)
 	EFFECTIVE_VERSION := $(EFFECTIVE_VERSION)-dirty
@@ -120,3 +122,20 @@ operator-up: export LD_FLAGS = $(bash $(GARDENER_HACK_DIR)/hack/get-build-ld-fla
 .PHONY: operator-up
 operator-up: $(SKAFFOLD) $(HELM) $(KUBECTL)
 	@bash $(HACK_DIR)/operator-up.sh
+
+remote-kind-up remote-kind-down: export KIND_KUBECONFIG = $(REMOTE_SOURCE_KUBECONFIG)
+remote-kind-up remote-kind-down remote-operator-up: export KUBECONFIG = $(REMOTE_SOURCE_KUBECONFIG)
+
+.PHONY: remote-kind-up
+remote-kind-up: $(KIND) $(KUBECTL) $(YQ)
+	@bash $(HACK_DIR)/remote-kind-up.sh
+
+.PHONY: remote-kind-down
+remote-kind-down: $(KIND)
+	@bash $(HACK_DIR)/remote-kind-down.sh
+
+remote-operator-up: export LD_FLAGS = $(bash $(GARDENER_HACK_DIR)/hack/get-build-ld-flags.sh k8s.io/component-base $(REPO_ROOT)/VERSION diki-operator $(BUILD_DATE))
+
+.PHONY: remote-operator-up
+remote-operator-up: $(SKAFFOLD) $(HELM) $(KUBECTL) $(YQ)
+	@bash $(HACK_DIR)/remote-operator-up.sh

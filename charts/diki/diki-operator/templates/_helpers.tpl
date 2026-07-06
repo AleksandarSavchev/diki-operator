@@ -55,6 +55,21 @@ controllers:
       {{- else }}
       namespace: {{ .Release.Namespace }}
       {{- end }}
+{{- if .Values.config.controllers.complianceScan.dikiRunner.kubeconfig }}
+      kubeconfig:
+        secretRef:
+          name: {{ .Values.config.controllers.complianceScan.dikiRunner.kubeconfig.secretRef.name }}
+{{- if .Values.config.controllers.complianceScan.dikiRunner.kubeconfig.secretRef.key }}
+          key: {{ .Values.config.controllers.complianceScan.dikiRunner.kubeconfig.secretRef.key }}
+{{- end }}
+{{- if .Values.config.controllers.complianceScan.dikiRunner.kubeconfig.tokenSecretRef }}
+        tokenSecretRef:
+          name: {{ .Values.config.controllers.complianceScan.dikiRunner.kubeconfig.tokenSecretRef.name }}
+{{- if .Values.config.controllers.complianceScan.dikiRunner.kubeconfig.tokenSecretRef.key }}
+          key: {{ .Values.config.controllers.complianceScan.dikiRunner.kubeconfig.tokenSecretRef.key }}
+{{- end }}
+{{- end }}
+{{- end }}
 server:
   healthProbes:
     port: {{ .Values.config.server.healthProbes.port }}
