@@ -95,7 +95,8 @@ func (r *Reconciler) convertReportOutput(ctx context.Context, reportOutput *v1al
 
 func (r *Reconciler) resolveWebhookConfig(ctx context.Context, webhook *v1alpha1.OutputWebhook) (*reportexporterv1alpha1.WebhookOutputConfig, error) {
 	config := &reportexporterv1alpha1.WebhookOutputConfig{
-		URL: webhook.URL,
+		URL:    webhook.URL,
+		Method: webhook.Method,
 	}
 
 	// Resolve headers from CredentialsRef secret.

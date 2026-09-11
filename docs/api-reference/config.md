@@ -632,7 +632,19 @@ string
 </em>
 </td>
 <td>
-<p>URL is the destination endpoint to which the report will be POSTed.</p>
+<p>URL is the destination endpoint to which the report will be sent.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>method</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Method is the HTTP method used to send the report.<br />The report payload is always sent as the full JSON body regardless of the method.<br />This is useful when the receiving endpoint expects a specific method (e.g. PUT for upsert semantics).<br />Defaults to "POST".</p>
 </td>
 </tr>
 <tr>
@@ -1518,6 +1530,7 @@ boolean
 </em>
 </td>
 <td>
+<em>(Optional)</em>
 <p>InsecureSkipVerify disables TLS certificate verification.<br />Use with caution; intended for development/testing environments.</p>
 </td>
 </tr>

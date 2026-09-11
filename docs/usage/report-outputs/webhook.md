@@ -1,6 +1,6 @@
 # Webhook Output
 
-The Webhook output sends the compliance scan report as a JSON payload via an HTTP POST request to a configured endpoint.
+The Webhook output sends the compliance scan report as a JSON payload via a configurable HTTP method (POST, PUT, or PATCH) to a configured endpoint.
 
 ## Configuration
 
@@ -13,6 +13,7 @@ spec:
   output:
     webhook:
       url: "https://compliance-api.corp.example.com/v1/reports"
+      method: "POST"
       credentialsRef:
         name: webhook-headers
         namespace: kube-system
@@ -27,6 +28,7 @@ spec:
 | Field | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
 | `url` | string | **Yes** | - | The destination endpoint URL. The scheme (`http://` or `https://`) determines whether TLS is used. |
+| `method` | string | No | `POST` | The HTTP method used to send the report. Allowed values: `POST`, `PUT`, `PATCH`. |
 | `credentialsRef` | [SecretReference](#secretreference) | No | - | Reference to a Secret containing HTTP headers to include in the request. |
 | `tls` | [TLSConfig](#tlsconfig) | No | - | TLS settings for HTTPS connections. Only relevant when the URL uses the `https` scheme. |
 
