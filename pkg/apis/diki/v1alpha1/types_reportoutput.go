@@ -62,8 +62,16 @@ type OutputConfigMap struct {
 
 // OutputWebhook contains the configuration for exporting the report via an HTTP webhook.
 type OutputWebhook struct {
-	// URL is the destination endpoint to which the report will be POSTed.
+	// URL is the destination endpoint to which the report will be sent.
 	URL string `json:"url"`
+	// Method is the HTTP method used to send the report.
+	// The report payload is always sent as the full JSON body regardless of the method.
+	// This is useful when the receiving endpoint expects a specific method (e.g. PUT for upsert semantics).
+	// Defaults to "POST".
+	// +optional
+	// +kubebuilder:default="POST"
+	// +kubebuilder:validation:Enum={"POST","PUT","PATCH"}
+	Method string `json:"method,omitempty"`
 	// CredentialsRef is a reference to a Secret whose data at the given key contains a JSON object
 	// where keys are HTTP header names and values are the corresponding header values
 	// to include in the webhook request.

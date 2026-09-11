@@ -65,7 +65,8 @@ var _ = Describe("WebhookExporter", func() {
 		defer server.Close()
 
 		exporter := outputs.NewWebhookExporter(reportexporterv1alpha1.WebhookOutputConfig{
-			URL: server.URL,
+			URL:    server.URL,
+			Method: http.MethodPost,
 		})
 
 		details, err := exporter.Export(ctx, *dikiReport)
@@ -80,6 +81,37 @@ var _ = Describe("WebhookExporter", func() {
 		var receivedReport dikireport.Report
 		Expect(json.Unmarshal(receivedBody, &receivedReport)).To(Succeed())
 		Expect(receivedReport).To(Equal(*dikiReport))
+	})
+
+	It("should default to POST when method is not set", func() {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(r.Method).To(Equal(http.MethodPost))
+			w.WriteHeader(http.StatusOK)
+		}))
+		defer server.Close()
+
+		exporter := outputs.NewWebhookExporter(reportexporterv1alpha1.WebhookOutputConfig{
+			URL: server.URL,
+		})
+
+		_, err := exporter.Export(ctx, *dikiReport)
+		Expect(err).ToNot(HaveOccurred())
+	})
+
+	It("should use the configured HTTP method", func() {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			Expect(r.Method).To(Equal(http.MethodPut))
+			w.WriteHeader(http.StatusOK)
+		}))
+		defer server.Close()
+
+		exporter := outputs.NewWebhookExporter(reportexporterv1alpha1.WebhookOutputConfig{
+			URL:    server.URL,
+			Method: http.MethodPut,
+		})
+
+		_, err := exporter.Export(ctx, *dikiReport)
+		Expect(err).ToNot(HaveOccurred())
 	})
 
 	It("should apply headers to the request", func() {

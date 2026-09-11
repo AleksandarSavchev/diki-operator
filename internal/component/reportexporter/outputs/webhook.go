@@ -57,7 +57,12 @@ func (w *WebhookExporter) Export(ctx context.Context, report dikireport.Report) 
 		return nil, fmt.Errorf("failed to build HTTP client: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, w.Config.URL, bytes.NewReader(reportJSON))
+	method := w.Config.Method
+	if len(method) == 0 {
+		method = http.MethodPost
+	}
+
+	req, err := http.NewRequestWithContext(ctx, method, w.Config.URL, bytes.NewReader(reportJSON))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create HTTP request: %w", err)
 	}

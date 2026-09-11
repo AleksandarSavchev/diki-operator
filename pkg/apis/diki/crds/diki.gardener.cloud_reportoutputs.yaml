@@ -84,6 +84,18 @@ spec:
                         - name
                         - namespace
                         type: object
+                      method:
+                        default: POST
+                        description: |-
+                          Method is the HTTP method used to send the report.
+                          The report payload is always sent as the full JSON body regardless of the method.
+                          This is useful when the receiving endpoint expects a specific method (e.g. PUT for upsert semantics).
+                          Defaults to "POST".
+                        enum:
+                        - POST
+                        - PUT
+                        - PATCH
+                        type: string
                       tls:
                         description: |-
                           TLS configures TLS settings for the webhook connection.
@@ -113,12 +125,10 @@ spec:
                               InsecureSkipVerify disables TLS certificate verification.
                               Use with caution; intended for development/testing environments.
                             type: boolean
-                        required:
-                        - insecureSkipVerify
                         type: object
                       url:
                         description: URL is the destination endpoint to which the
-                          report will be POSTed.
+                          report will be sent.
                         type: string
                     required:
                     - url

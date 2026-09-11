@@ -55,8 +55,12 @@ const (
 // All secrets are resolved by the operator at reconciliation time.
 // The exporter receives plain values and does not need access to Secrets.
 type WebhookOutputConfig struct {
-	// URL is the destination endpoint to which the report will be POSTed.
+	// URL is the destination endpoint to which the report will be sent.
 	URL string `json:"url"`
+	// Method is the HTTP method used to send the report.
+	// The report payload is always sent as the full JSON body regardless of the method.
+	// This is useful when the receiving endpoint expects a specific method (e.g. PUT for upsert semantics).
+	Method string `json:"method"`
 	// Headers contains HTTP headers to include in the webhook request.
 	// +optional
 	Headers map[string]string `json:"headers,omitempty"`

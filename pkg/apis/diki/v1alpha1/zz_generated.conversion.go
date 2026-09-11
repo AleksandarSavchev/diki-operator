@@ -565,6 +565,7 @@ func Convert_diki_OutputStatus_To_v1alpha1_OutputStatus(in *diki.OutputStatus, o
 
 func autoConvert_v1alpha1_OutputWebhook_To_diki_OutputWebhook(in *OutputWebhook, out *diki.OutputWebhook, s conversion.Scope) error {
 	out.URL = in.URL
+	out.Method = in.Method
 	out.CredentialsRef = (*diki.SecretReference)(unsafe.Pointer(in.CredentialsRef))
 	out.TLS = (*diki.TLSConfig)(unsafe.Pointer(in.TLS))
 	return nil
@@ -577,6 +578,7 @@ func Convert_v1alpha1_OutputWebhook_To_diki_OutputWebhook(in *OutputWebhook, out
 
 func autoConvert_diki_OutputWebhook_To_v1alpha1_OutputWebhook(in *diki.OutputWebhook, out *OutputWebhook, s conversion.Scope) error {
 	out.URL = in.URL
+	out.Method = in.Method
 	out.CredentialsRef = (*SecretReference)(unsafe.Pointer(in.CredentialsRef))
 	out.TLS = (*TLSConfig)(unsafe.Pointer(in.TLS))
 	return nil
