@@ -62,11 +62,11 @@ type WebhookOutputConfig struct {
 	Headers map[string]string `json:"headers,omitempty"`
 	// TLS contains resolved TLS settings for the webhook connection.
 	// +optional
-	TLS *WebhookTLSConfig `json:"tls,omitempty"`
+	TLS *TLSConfig `json:"tls,omitempty"`
 }
 
-// WebhookTLSConfig contains resolved TLS settings for the webhook exporter.
-type WebhookTLSConfig struct {
+// TLSConfig contains resolved TLS settings for the webhook exporter.
+type TLSConfig struct {
 	// InsecureSkipVerify disables TLS certificate verification.
 	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty"`
 	// CACert contains a PEM-encoded CA certificate bundle.

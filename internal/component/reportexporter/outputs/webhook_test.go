@@ -129,7 +129,7 @@ var _ = Describe("WebhookExporter", func() {
 
 		exporter := outputs.NewWebhookExporter(reportexporterv1alpha1.WebhookOutputConfig{
 			URL: server.URL,
-			TLS: &reportexporterv1alpha1.WebhookTLSConfig{
+			TLS: &reportexporterv1alpha1.TLSConfig{
 				InsecureSkipVerify: true,
 			},
 		})
@@ -223,7 +223,7 @@ var _ = Describe("WebhookExporter", func() {
 
 		exporter := outputs.NewWebhookExporter(reportexporterv1alpha1.WebhookOutputConfig{
 			URL: server.URL,
-			TLS: &reportexporterv1alpha1.WebhookTLSConfig{
+			TLS: &reportexporterv1alpha1.TLSConfig{
 				CACert: string(caCertPEM),
 			},
 		})
@@ -244,7 +244,7 @@ var _ = Describe("WebhookExporter", func() {
 
 		exporter := outputs.NewWebhookExporter(reportexporterv1alpha1.WebhookOutputConfig{
 			URL: server.URL,
-			TLS: &reportexporterv1alpha1.WebhookTLSConfig{
+			TLS: &reportexporterv1alpha1.TLSConfig{
 				CACert: "not a valid certificate",
 			},
 		})
