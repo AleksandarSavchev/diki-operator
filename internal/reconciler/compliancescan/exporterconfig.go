@@ -119,8 +119,8 @@ func (r *Reconciler) resolveWebhookConfig(ctx context.Context, webhook *v1alpha1
 	return config, nil
 }
 
-func (r *Reconciler) resolveTLSConfig(ctx context.Context, tls *v1alpha1.TLSConfig) (*reportexporterv1alpha1.WebhookTLSConfig, error) {
-	tlsConfig := &reportexporterv1alpha1.WebhookTLSConfig{
+func (r *Reconciler) resolveTLSConfig(ctx context.Context, tls *v1alpha1.TLSConfig) (*reportexporterv1alpha1.TLSConfig, error) {
+	tlsConfig := &reportexporterv1alpha1.TLSConfig{
 		InsecureSkipVerify: tls.InsecureSkipVerify,
 	}
 
