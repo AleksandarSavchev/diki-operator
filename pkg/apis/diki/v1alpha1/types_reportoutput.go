@@ -90,7 +90,8 @@ type SecretReference struct {
 type TLSConfig struct {
 	// InsecureSkipVerify disables TLS certificate verification.
 	// Use with caution; intended for development/testing environments.
-	InsecureSkipVerify bool `json:"insecureSkipVerify"`
+	// +optional
+	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty"`
 	// CASecretRef is a reference to a Secret containing a custom CA certificate bundle.
 	// The referenced key should contain PEM-encoded CA certificate(s).
 	// If not set, the system's root CA pool is used.
